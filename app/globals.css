@@ -30,3 +30,227 @@ button,
 select {
   font: inherit;
 }
+
+.menu-cover {
+  margin-bottom: 2.5rem;
+  text-align: center;
+}
+
+.menu-cover-brand {
+  margin: 0 auto 1.75rem;
+}
+
+.menu-cover-mark {
+  display: flex;
+  width: 4.5rem;
+  height: 4.5rem;
+  margin: 0 auto 0.85rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  background: #1e3a2f;
+  color: #fbf8f1;
+  font-family: var(--font-cormorant), serif;
+  font-size: 2.35rem;
+  line-height: 1;
+}
+
+.menu-cover-name {
+  font-family: var(--font-cormorant), serif;
+  font-size: 2.75rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: #1e3a2f;
+}
+
+.menu-cover-tag {
+  margin-top: 0.35rem;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: #8a8578;
+}
+
+.menu-cover-frame {
+  border: 2.5px solid #e56a45;
+  border-radius: 2.25rem;
+  padding: 2rem 1.75rem;
+  color: #1b1e19;
+  font-size: 21px;
+  line-height: 1.5;
+  font-weight: 600;
+  text-align: center;
+}
+
+.menu-sheet--measure {
+  width: 182mm !important;
+  max-width: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+.menu-sheet--measure .menu-cover-mark {
+  width: 18mm;
+  height: 18mm;
+  font-size: 14mm;
+  margin-bottom: 4mm;
+}
+
+.menu-sheet--measure .menu-cover-name {
+  font-size: 16mm;
+}
+
+.menu-sheet--measure .menu-cover-frame {
+  font-size: 21px;
+  line-height: 1.55;
+  padding: 10mm 12mm;
+}
+
+.menu-stack .menu-cat,
+.menu-sheet > .menu-cat {
+  margin-bottom: 1.15rem;
+}
+
+.menu-print-pages {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.25rem;
+  background: #ece7dc;
+}
+
+.menu-print-page {
+  box-sizing: border-box;
+  width: min(100%, 210mm);
+  min-height: 297mm;
+  padding: 14mm;
+  margin: 0 auto;
+  background: #ffffff;
+  box-shadow: 0 10px 32px rgba(27, 30, 25, 0.08);
+}
+
+.menu-print-page .menu-cover {
+  margin-bottom: 0;
+}
+
+.menu-dish {
+  break-inside: avoid;
+  page-break-inside: avoid;
+}
+
+.menu-cat-title {
+  break-after: avoid;
+  page-break-after: avoid;
+}
+
+.wine-row {
+  break-inside: avoid;
+  page-break-inside: avoid;
+}
+
+@media print {
+  @page {
+    size: A4 portrait;
+    margin: 14mm;
+  }
+
+  html,
+  body {
+    height: auto !important;
+    min-height: 0 !important;
+    background: #ffffff !important;
+  }
+
+  .menu-admin-chrome {
+    display: none !important;
+  }
+
+  .menu-admin-root {
+    background: #ffffff !important;
+    min-height: 0 !important;
+    height: auto !important;
+    display: block !important;
+  }
+
+  .menu-sheet,
+  .menu-print-page,
+  .menu-cover,
+  .menu-print-pages {
+    background: #ffffff !important;
+    box-shadow: none !important;
+  }
+
+  .menu-print-pages {
+    display: block !important;
+    gap: 0 !important;
+    padding: 0 !important;
+  }
+
+  .menu-print-page {
+    width: auto !important;
+    min-height: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  .menu-sheet {
+    max-width: 100% !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    background: #ffffff !important;
+  }
+
+  .menu-print-page,
+  .menu-cover {
+    padding: 0 !important;
+  }
+
+  .menu-cover {
+    break-after: page;
+    page-break-after: always;
+    margin-bottom: 0;
+  }
+
+  .menu-print-pages .menu-cover {
+    break-after: auto;
+    page-break-after: auto;
+    margin-bottom: 0;
+  }
+
+  .menu-print-page {
+    break-after: page;
+    page-break-after: always;
+  }
+
+  .menu-print-page:last-child {
+    break-after: auto;
+    page-break-after: auto;
+  }
+
+  .menu-cover-frame {
+    font-size: 21px;
+    line-height: 1.55;
+    padding: 10mm 12mm;
+  }
+
+  .menu-cover-frame p + p {
+    margin-top: 7mm;
+  }
+
+  .menu-cat-title {
+    font-size: 28px !important;
+    font-weight: 700 !important;
+    font-style: italic !important;
+    color: #8f6a24 !important;
+  }
+
+  .wine-table thead {
+    display: table-header-group;
+  }
+
+  .wine-table {
+    break-inside: auto;
+    page-break-inside: auto;
+  }
+}

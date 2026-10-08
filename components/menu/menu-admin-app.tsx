@@ -34,8 +34,18 @@ import {
   categoriesForFamily,
   familyIdForCategoryName,
 } from "@/components/menu/menu-family-bar";
+import { MenuSheet } from "@/components/menu/menu-sheet";
 import type { MenuCategoryDto, MenuItemDto } from "@/components/menu/menu-types";
 import type { MenuFamilyId } from "@/components/menu/menu-groups";
+import {
+  loadLastPrintHashes,
+  modifiedPrintPages,
+  pagePreviewLabel,
+  rememberPrintedPages,
+  appendMissingPrintItems,
+  slicePrintPagesFromDom,
+  type PrintPageSlice,
+} from "@/components/menu/print-pagination";
 import { useOwnerLogout } from "@/components/menu/owner-gate";
 
 type DishFormState = {
@@ -63,10 +73,6 @@ const emptyForm: DishFormState = {
 const fieldClass =
   "h-10 w-full rounded-lg border border-[#D9CFB8] bg-[#FBF8F1] px-2.5 text-base outline-none focus:border-[#1E3A2F]/40";
 
-function comingSoon() {
-  toast.message("Impression et QR code : prochaine étape.");
-}
-
 export function MenuAdminApp() {
   const logout = useOwnerLogout();
   const [view, setView] = useState<AdminView>("edit");
@@ -75,12 +81,21 @@ export function MenuAdminApp() {
     null,
   );
   const [familyId, setFamilyId] = useState<MenuFamilyId>("all");
+  const [printOpen, setPrintOpen] = useState(false);
+  const [printSelection, setPrintSelection] = useState<number[]>([]);
+  const [printSlices, setPrintSlices] = useState<PrintPageSlice[] | null>(null);
+  const [estimatedPages, setEstimatedPages] = useState<PrintPageSlice[]>([]);
+  const [modifiedPages, setModifiedPages] = useState<number[]>([]);
+  const measureRef = useRef<HTMLDivElement>(null);
+  const pageHeightRef = useRef<HTMLDivElement>(null);
   const [loading, setLoading] = useState(true);
   const [editingItem, setEditingItem] = useState<MenuItemDto | null>(null);
   const [isCreating, setIsCreating] = useState(false);
   const [form, setForm] = useState<DishFormState>(emptyForm);
   const [saving, setSaving] = useState(false);
+  const [qrOpen, setQrOpen] = useState(false);
   const [navOpen, setNavOpen] = useState(false);
+  const [menuPublicUrl, setMenuPublicUrl] = useState("/menu");
   const [pendingDelete, setPendingDelete] = useState<MenuItemDto | null>(null);
   const [deleting, setDeleting] = useState(false);
   const [reordering, setReordering] = useState(false);
@@ -125,6 +140,10 @@ export function MenuAdminApp() {
   useEffect(() => {
     void loadMenu();
   }, [loadMenu]);
+
+  useEffect(() => {
+    setMenuPublicUrl(`${window.location.origin}/menu`);
+  }, []);
 
   useEffect(() => {
     if (!pendingDelete) return;
@@ -349,7 +368,100 @@ export function MenuAdminApp() {
     }
   }
 
+  function openPrintModal() {
+    setEstimatedPages([]);
+    setPrintSelection([]);
+    setModifiedPages([]);
+    setPrintOpen(true);
+  }
+
+  useEffect(() => {
+    if (!printOpen) return;
+
+    let cancelled = false;
+
+    async function measurePages() {
+      await document.fonts.ready;
+      await new Promise((resolve) => requestAnimationFrame(() => resolve(null)));
+      await new Promise((resolve) => requestAnimationFrame(() => resolve(null)));
+      if (cancelled) return;
+      const root = measureRef.current;
+      const probe = pageHeightRef.current;
+      if (!root || !probe) return;
+      const slices = slicePrintPagesFromDom(
+        root,
+        Math.max(probe.offsetHeight, 1),
+        categories,
+      );
+      const modified = modifiedPrintPages(slices, loadLastPrintHashes());
+      setEstimatedPages(slices);
+      setModifiedPages(modified);
+      setPrintSelection(slices.map((slice) => slice.page));
+    }
+
+    void measurePages();
+    return () => {
+      cancelled = true;
+    };
+  }, [printOpen, categories]);
+
+  function togglePrintPage(page: number) {
+    setPrintSelection((current) =>
+      current.includes(page)
+        ? current.filter((value) => value !== page)
+        : [...current, page].sort((a, b) => a - b),
+    );
+  }
+
+  function selectAllPrintPages() {
+    setPrintSelection(estimatedPages.map((slice) => slice.page));
+  }
+
+  function selectModifiedPrintPages() {
+    setPrintSelection(modifiedPages);
+  }
+
+  function handlePrintSelection() {
+    if (printSelection.length === 0) {
+      toast.error("Sélectionnez au moins une page.");
+      return;
+    }
+
+    const selected = estimatedPages.filter((slice) =>
+      printSelection.includes(slice.page),
+    );
+    setPrintSlices(appendMissingPrintItems(selected, categories));
+    setView("preview");
+    setPrintOpen(false);
+
+    window.setTimeout(() => {
+      window.print();
+    }, 200);
+  }
+
+  useEffect(() => {
+    function onAfterPrint() {
+      if (printSlices !== null && estimatedPages.length > 0) {
+        rememberPrintedPages(
+          estimatedPages,
+          printSlices.map((slice) => slice.page),
+        );
+      }
+      setPrintSlices(null);
+    }
+    window.addEventListener("afterprint", onAfterPrint);
+    return () => window.removeEventListener("afterprint", onAfterPrint);
+  }, [printSlices, estimatedPages]);
+
   const formOpen = isCreating || editingItem !== null;
+  const qrSrc = `/api/menu/qr?url=${encodeURIComponent(menuPublicUrl)}`;
+  const allPagesSelected =
+    estimatedPages.length > 0 &&
+    printSelection.length === estimatedPages.length;
+  const modifiedPagesSelected =
+    modifiedPages.length > 0 &&
+    printSelection.length === modifiedPages.length &&
+    modifiedPages.every((page) => printSelection.includes(page));
 
   return (
     <div className="menu-admin-root flex min-h-dvh flex-1 flex-col bg-[#F7F2E7] text-[#1B1E19]">
@@ -392,7 +504,7 @@ export function MenuAdminApp() {
             <button
               type="button"
               className="inline-flex items-center gap-1.5 rounded-md border border-[#D8B871]/70 px-3 py-2 text-[13px] text-[#FBF8F1] transition hover:bg-white/10"
-              onClick={comingSoon}
+              onClick={openPrintModal}
             >
               <Printer className="size-3.5" />
               Imprimer
@@ -400,7 +512,7 @@ export function MenuAdminApp() {
             <button
               type="button"
               className="inline-flex items-center gap-1.5 rounded-md bg-[#B68A3D] px-3 py-2 text-[13px] font-semibold text-[#1E3A2F] transition hover:bg-[#D8B871]"
-              onClick={comingSoon}
+              onClick={() => setQrOpen(true)}
             >
               <QrCode className="size-3.5" />
               QR code
@@ -463,7 +575,7 @@ export function MenuAdminApp() {
               className="flex w-full items-center justify-center gap-1.5 rounded-md border border-[#D8B871]/70 px-3 py-2.5 text-[13px]"
               onClick={() => {
                 setNavOpen(false);
-                comingSoon();
+                openPrintModal();
               }}
             >
               <Printer className="size-3.5" />
@@ -474,7 +586,7 @@ export function MenuAdminApp() {
               className="flex w-full items-center justify-center gap-1.5 rounded-md bg-[#B68A3D] px-3 py-2.5 text-[13px] font-semibold text-[#1E3A2F]"
               onClick={() => {
                 setNavOpen(false);
-                comingSoon();
+                setQrOpen(true);
               }}
             >
               <QrCode className="size-3.5" />
@@ -562,8 +674,24 @@ export function MenuAdminApp() {
           </section>
         </div>
       ) : (
-        <div className="flex min-h-0 flex-1 flex-col overflow-y-auto bg-[#F4F1EA]">
-          <DigitalMenu categories={categories} />
+        <div className="flex min-h-0 flex-1 flex-col bg-[#F4F1EA]">
+          <div
+            className={`flex-1 overflow-y-auto print:hidden ${printSlices !== null ? "hidden" : ""}`}
+          >
+            <DigitalMenu categories={categories} />
+          </div>
+          <div
+            className={
+              printSlices !== null ? "block bg-white" : "hidden bg-white print:block"
+            }
+          >
+            <MenuSheet
+              categories={categories}
+              printSlices={
+                printSlices && printSlices.length > 0 ? printSlices : null
+              }
+            />
+          </div>
         </div>
       )}
 
@@ -691,6 +819,147 @@ export function MenuAdminApp() {
                 className="rounded-md bg-[#1E3A2F] px-4 py-2 text-[13.5px] font-semibold text-[#FBF8F1] hover:bg-[#2C5142] disabled:opacity-60"
               >
                 {saving ? "Enregistrement…" : "Enregistrer"}
+              </button>
+            </div>
+          </div>
+        </div>
+      ) : null}
+
+      {printOpen ? (
+        <div className="menu-admin-chrome fixed inset-0 z-50 flex items-center justify-center bg-[#1B1E19]/55 p-5">
+          <div className="pointer-events-none fixed top-0 -left-[240vw] -z-10">
+            <div ref={pageHeightRef} className="h-[269mm] w-[182mm]" />
+            <div ref={measureRef} className="w-[182mm]">
+              <MenuSheet categories={categories} measure />
+            </div>
+          </div>
+
+          <div className="w-full max-w-[420px] rounded-xl bg-white p-6 shadow-xl">
+            <h3 className="font-[family-name:var(--font-cormorant)] text-[23px]">
+              Imprimer le menu
+            </h3>
+
+            <div className="mt-4 space-y-2">
+              <label className="flex cursor-pointer items-center gap-3 rounded-lg border border-[#D9CFB8] bg-[#FBF8F1] px-3 py-2.5">
+                <input
+                  type="checkbox"
+                  checked={allPagesSelected}
+                  onChange={() => {
+                    if (allPagesSelected) {
+                      setPrintSelection([]);
+                    } else {
+                      selectAllPrintPages();
+                    }
+                  }}
+                  className="size-4 accent-[#1E3A2F]"
+                />
+                <span className="text-sm font-medium">Tout</span>
+              </label>
+              <label className="flex cursor-pointer items-center gap-3 rounded-lg border border-[#D9CFB8] bg-[#FBF8F1] px-3 py-2.5">
+                <input
+                  type="checkbox"
+                  checked={modifiedPagesSelected}
+                  disabled={modifiedPages.length === 0}
+                  onChange={() => {
+                    if (modifiedPagesSelected) {
+                      setPrintSelection([]);
+                    } else {
+                      selectModifiedPrintPages();
+                    }
+                  }}
+                  className="size-4 accent-[#1E3A2F]"
+                />
+                <span className="text-sm font-medium">
+                  Imprimer les pages modifiées
+                </span>
+                <span className="ml-auto text-xs text-[#6b6a5f]">
+                  {modifiedPages.length}
+                </span>
+              </label>
+            </div>
+
+            <ul className="mt-4 max-h-64 space-y-2 overflow-y-auto">
+              {estimatedPages.length === 0 ? (
+                <li className="px-1 py-6 text-center text-sm text-[#6b6a5f]">
+                  Calcul des pages…
+                </li>
+              ) : (
+                estimatedPages.map((slice) => {
+                  const checked = printSelection.includes(slice.page);
+                  const changed = modifiedPages.includes(slice.page);
+                  return (
+                    <li key={slice.page}>
+                      <label className="flex cursor-pointer items-center gap-3 rounded-lg border border-[#D9CFB8] bg-[#FBF8F1] px-3 py-2.5">
+                        <input
+                          type="checkbox"
+                          checked={checked}
+                          onChange={() => togglePrintPage(slice.page)}
+                          className="size-4 accent-[#1E3A2F]"
+                        />
+                        <span className="flex-1 text-sm font-medium">
+                          Page {slice.page}
+                        </span>
+                        <span className="max-w-[58%] truncate text-right text-xs text-[#6b6a5f]">
+                          {changed ? "modifiée · " : ""}
+                          {pagePreviewLabel(slice)}
+                        </span>
+                      </label>
+                    </li>
+                  );
+                })
+              )}
+            </ul>
+
+            <div className="mt-5 flex justify-end gap-2">
+              <button
+                type="button"
+                onClick={() => setPrintOpen(false)}
+                className="rounded-md border border-[#D9CFB8] px-4 py-2 text-[13.5px]"
+              >
+                Annuler
+              </button>
+              <button
+                type="button"
+                onClick={handlePrintSelection}
+                className="rounded-md bg-[#1E3A2F] px-4 py-2 text-[13.5px] font-semibold text-[#FBF8F1]"
+              >
+                Imprimer
+              </button>
+            </div>
+          </div>
+        </div>
+      ) : null}
+
+      {qrOpen ? (
+        <div className="menu-admin-chrome fixed inset-0 z-50 flex items-center justify-center bg-[#1B1E19]/55 p-5">
+          <div className="w-full max-w-[360px] rounded-xl bg-white p-6 text-center shadow-xl">
+            <h3 className="font-[family-name:var(--font-cormorant)] text-[23px]">
+              QR code du menu
+            </h3>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={qrSrc}
+              alt="QR code menu"
+              className="mx-auto mt-4 h-[220px] w-[220px] rounded-lg border border-[#D9CFB8]"
+            />
+            <p className="mt-3 break-all text-xs text-[#6b6a5f]">{menuPublicUrl}</p>
+            <p className="mt-2 text-xs text-[#6b6a5f]">
+              Ce lien reste fixe. Modifier les plats ne change pas le QR.
+            </p>
+            <div className="mt-5 flex justify-center gap-2">
+              <a
+                href={qrSrc}
+                download="la-grappa-menu-qr.png"
+                className="rounded-md border border-[#D9CFB8] px-4 py-2 text-[13.5px]"
+              >
+                Télécharger
+              </a>
+              <button
+                type="button"
+                onClick={() => setQrOpen(false)}
+                className="rounded-md bg-[#1E3A2F] px-4 py-2 text-[13.5px] font-semibold text-[#FBF8F1]"
+              >
+                Fermer
               </button>
             </div>
           </div>
