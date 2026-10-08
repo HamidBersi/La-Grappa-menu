@@ -22,6 +22,18 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "La Grappa",
   description: "Carte digitale du restaurant La Grappa",
+  icons: {
+    icon: [
+      { url: "/icons/icon-192.png?v=1", sizes: "192x192", type: "image/png" },
+      { url: "/icons/icon-512.png?v=1", sizes: "512x512", type: "image/png" },
+    ],
+    apple: [{ url: "/icons/apple-touch-icon.png?v=1", sizes: "180x180" }],
+  },
+  appleWebApp: {
+    capable: true,
+    title: "La Grappa",
+    statusBarStyle: "default",
+  },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

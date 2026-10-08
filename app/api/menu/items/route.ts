@@ -6,6 +6,7 @@ import {
   parseOptionalPrice,
   parseRequiredPrice,
 } from "@/lib/menu-price";
+import { normalizeDishEmoji } from "@/lib/dish-emoji";
 
 const NAME_MAX = 120;
 const DESCRIPTION_MAX = 500;
@@ -19,6 +20,7 @@ type CreateItemBody = {
   priceQuart?: string;
   priceDemi?: string;
   priceBouteille?: string;
+  emoji?: string | null;
 };
 
 export async function POST(request: Request) {
@@ -111,6 +113,7 @@ export async function POST(request: Request) {
       priceQuart: quart.value,
       priceDemi: demi.value,
       priceBouteille: bouteille.value,
+      emoji: normalizeDishEmoji(input.emoji),
     },
   });
 

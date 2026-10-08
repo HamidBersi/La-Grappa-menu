@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 
+import { BrandLogo } from "@/components/brand-logo";
 import {
   LOCALE_LABELS,
   MENU_LOCALES,
@@ -90,9 +91,9 @@ export function MenuTopNav({ locale, onLocaleChange }: MenuTopNavProps) {
           type="button"
           onClick={goBack}
           aria-label={ui.backLabel}
-          className="flex size-[52px] shrink-0 items-center justify-center rounded-full bg-[#1E3A2F] font-[family-name:var(--font-cormorant)] text-2xl text-[#FBF8F1] ring-1 ring-[#1B1E19]/20 transition active:scale-95 hover:opacity-90"
+          className="shrink-0 rounded-full transition active:scale-95 hover:opacity-90"
         >
-          G
+          <BrandLogo size={52} className="size-[52px]" />
         </button>
         <div className="min-w-0">
           <p className="truncate font-[family-name:var(--font-cormorant)] text-[22px] leading-none font-semibold tracking-wide text-[#1E3A2F]">

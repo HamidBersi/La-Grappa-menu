@@ -1,6 +1,8 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
 
+import { BrandLogo } from "@/components/brand-logo";
+
 export type PortalCardProps = {
   href: string;
   emoji: string;
@@ -78,6 +80,9 @@ export function PortalShell({
       <div className="relative z-10 mx-auto flex min-h-screen max-w-2xl flex-col px-6 py-10">
         <div className="flex flex-1 flex-col items-center justify-center">
           <header className="animate-in fade-in slide-in-from-bottom-4 fill-mode-both text-center duration-700">
+            <div className="mb-5 flex justify-center">
+              <BrandLogo size={96} className="size-24" />
+            </div>
             <p className="font-[family-name:var(--font-cormorant)] text-[clamp(2.75rem,9vw,4.25rem)] font-light leading-none tracking-[0.16em] text-[#0F4C3A]">
               {eyebrow}
             </p>

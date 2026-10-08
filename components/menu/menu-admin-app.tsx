@@ -19,6 +19,7 @@ import {
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { GripVertical, LogOut, Menu, Plus, Printer, QrCode, Trash2, X } from "lucide-react";
+import { BrandLogo } from "@/components/brand-logo";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Toaster, toast } from "sonner";
 
@@ -27,7 +28,12 @@ import {
   normalizeStoredPrice,
   sanitizePriceInput,
 } from "@/lib/menu-price";
-import { DishTitle } from "@/components/menu/dish-title";
+import { DishMark, DishTitle } from "@/components/menu/dish-title";
+import { DishEmojiSelect } from "@/components/menu/dish-emoji-select";
+import {
+  DishDeletedSearch,
+  type DeletedDishHit,
+} from "@/components/menu/dish-deleted-search";
 import { DigitalMenu } from "@/components/menu/digital-menu";
 import {
   MenuFamilyBar,
@@ -56,6 +62,7 @@ type DishFormState = {
   priceQuart: string;
   priceDemi: string;
   priceBouteille: string;
+  emoji: string;
 };
 
 type AdminView = "edit" | "preview";
@@ -68,6 +75,7 @@ const emptyForm: DishFormState = {
   priceQuart: "",
   priceDemi: "",
   priceBouteille: "",
+  emoji: "",
 };
 
 const fieldClass =
@@ -98,6 +106,7 @@ export function MenuAdminApp() {
   const [menuPublicUrl, setMenuPublicUrl] = useState("/menu");
   const [pendingDelete, setPendingDelete] = useState<MenuItemDto | null>(null);
   const [deleting, setDeleting] = useState(false);
+  const [restoringId, setRestoringId] = useState<string | null>(null);
   const [reordering, setReordering] = useState(false);
 
   const sensors = useSensors(
@@ -235,12 +244,14 @@ export function MenuAdminApp() {
       return;
     }
     setEditingItem(null);
+    setRestoringId(null);
     setIsCreating(true);
     setForm(emptyForm);
   }
 
   function openEdit(item: MenuItemDto) {
     setIsCreating(false);
+    setRestoringId(null);
     setEditingItem(item);
     setForm({
       name: item.name,
@@ -250,13 +261,29 @@ export function MenuAdminApp() {
       priceQuart: normalizeStoredPrice(item.priceQuart ?? "") ?? "",
       priceDemi: normalizeStoredPrice(item.priceDemi ?? "") ?? "",
       priceBouteille: normalizeStoredPrice(item.priceBouteille ?? "") ?? "",
+      emoji: item.emoji ?? "",
     });
   }
 
   function closeForm() {
     setIsCreating(false);
     setEditingItem(null);
+    setRestoringId(null);
     setForm(emptyForm);
+  }
+
+  function applyDeletedHit(hit: DeletedDishHit) {
+    setRestoringId(hit.id);
+    setForm({
+      name: hit.name,
+      description: hit.description ?? "",
+      price: normalizeStoredPrice(hit.price) ?? hit.price,
+      priceVerre: normalizeStoredPrice(hit.priceVerre ?? "") ?? "",
+      priceQuart: normalizeStoredPrice(hit.priceQuart ?? "") ?? "",
+      priceDemi: normalizeStoredPrice(hit.priceDemi ?? "") ?? "",
+      priceBouteille: normalizeStoredPrice(hit.priceBouteille ?? "") ?? "",
+      emoji: hit.emoji ?? "",
+    });
   }
 
   async function saveDish() {
@@ -296,11 +323,13 @@ export function MenuAdminApp() {
             description: form.description,
             price,
             ...wineTiers,
+            emoji: form.emoji,
           }
         : {
             name,
             description: form.description,
             price,
+            emoji: form.emoji,
           };
       if (editingItem) {
         const response = await fetch(`/api/menu/items/${editingItem.id}`, {
@@ -317,6 +346,25 @@ export function MenuAdminApp() {
           return;
         }
         toast.success("Plat mis à jour");
+      } else if (restoringId) {
+        const response = await fetch(`/api/menu/items/${restoringId}`, {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+          body: JSON.stringify({
+            ...payload,
+            categoryId: selectedCategoryId,
+            isAvailable: true,
+          }),
+        });
+        if (!response.ok) {
+          const data = (await response.json().catch(() => null)) as {
+            error?: string;
+          } | null;
+          toast.error(data?.error ?? "Impossible de rétablir ce plat.");
+          return;
+        }
+        toast.success("Plat rétabli");
       } else {
         const response = await fetch("/api/menu/items", {
           method: "POST",
@@ -467,7 +515,8 @@ export function MenuAdminApp() {
     <div className="menu-admin-root flex min-h-dvh flex-1 flex-col bg-[#F7F2E7] text-[#1B1E19]">
       <header className="menu-admin-chrome shrink-0 bg-[#1E3A2F] text-[#FBF8F1]">
         <div className="flex items-center justify-between gap-3 px-5 py-3.5">
-          <div className="flex min-w-0 items-baseline gap-2.5">
+          <div className="flex min-w-0 items-center gap-2.5">
+            <BrandLogo size={36} className="size-9 ring-[#D8B871]/40" alt="" />
             <span className="font-[family-name:var(--font-cormorant)] text-[22px] tracking-wide">
               Le Menu
             </span>
@@ -707,14 +756,43 @@ export function MenuAdminApp() {
                 <span className="mb-1.5 block text-[12.5px] font-semibold text-[#6b6a5f]">
                   {isWineForm ? "Nom du vin" : "Nom du plat"}
                 </span>
-                <input
-                  value={form.name}
-                  onChange={(event) =>
-                    setForm((current) => ({ ...current, name: event.target.value }))
-                  }
-                  placeholder="Ex. Filet de bœuf"
-                  className={fieldClass}
-                />
+                <DishDeletedSearch
+                  query={form.name}
+                  categoryId={selectedCategoryId}
+                  enabled={isCreating}
+                  onSelect={applyDeletedHit}
+                >
+                  <div className="flex h-10 w-full items-center rounded-lg border border-[#D9CFB8] bg-[#FBF8F1] pl-2.5 pr-1 focus-within:border-[#1E3A2F]/40">
+                    <input
+                      value={form.name}
+                      onChange={(event) => {
+                        setRestoringId(null);
+                        setForm((current) => ({
+                          ...current,
+                          name: event.target.value,
+                        }));
+                      }}
+                      placeholder="Ex. Filet de bœuf"
+                      autoComplete="off"
+                      className={`bg-transparent text-base outline-none ${
+                        form.name
+                          ? "field-sizing-content w-auto min-w-[1ch] max-w-[calc(100%-4.25rem)]"
+                          : "min-w-0 flex-1"
+                      }`}
+                    />
+                    {form.emoji ? (
+                      <span className="ml-1 inline-flex shrink-0 items-center" aria-hidden>
+                        <DishMark emoji={form.emoji} />
+                      </span>
+                    ) : null}
+                    <DishEmojiSelect
+                      value={form.emoji}
+                      onChange={(emoji) =>
+                        setForm((current) => ({ ...current, emoji }))
+                      }
+                    />
+                  </div>
+                </DishDeletedSearch>
               </label>
 
               <label className="block">
@@ -996,7 +1074,8 @@ export function MenuAdminApp() {
               id="delete-dish-copy"
               className="mt-3 text-[13.5px] leading-relaxed text-[#6b6a5f]"
             >
-              Cette action est définitive. Il disparaîtra de la carte digitale.
+              Il disparaîtra de la carte. Tu pourras le retrouver en tapant son
+              nom lors de l’ajout d’un plat.
             </p>
             <div className="mt-6 flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
               <button

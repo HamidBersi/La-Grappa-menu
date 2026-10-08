@@ -43,7 +43,7 @@ export async function PATCH(request: Request) {
   }
 
   const items = await prisma.menuItem.findMany({
-    where: { categoryId },
+    where: { categoryId, isAvailable: true },
     select: { id: true },
   });
   const existingIds = new Set(items.map((item) => item.id));

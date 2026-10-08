@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 
+import { BrandLogo } from "@/components/brand-logo";
 import { PIN_LENGTH } from "@/lib/admin-auth";
 
 type PinScreenProps = {
@@ -134,8 +135,8 @@ export function PinScreen({
       <div className="relative w-full max-w-md">
         <div className="rounded-xl border border-[#D9CFB8] bg-white p-8">
           <div className="mb-8 text-center">
-            <div className="mx-auto mb-4 flex size-14 items-center justify-center rounded-xl bg-[#1E3A2F] font-[family-name:var(--font-cormorant)] text-2xl text-[#FBF8F1] ring-1 ring-[#D9CFB8]">
-              G
+            <div className="mx-auto mb-4 w-fit">
+              <BrandLogo size={72} className="size-[72px]" />
             </div>
             <h1 className="font-[family-name:var(--font-cormorant)] text-4xl font-semibold tracking-tight text-[#1B1E19]">
               La Grappa

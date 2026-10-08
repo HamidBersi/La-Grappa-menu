@@ -10,7 +10,10 @@ export async function GET() {
     where: { menuType: "plats" },
     orderBy: { position: "asc" },
     include: {
-      items: { orderBy: { position: "asc" } },
+      items: {
+        where: { isAvailable: true },
+        orderBy: { position: "asc" },
+      },
     },
   });
 

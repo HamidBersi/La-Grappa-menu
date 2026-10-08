@@ -1,3 +1,4 @@
+import { BrandLogo } from "@/components/brand-logo";
 import type { MenuCategoryDto, MenuItemDto } from "@/components/menu/menu-types";
 import { isListedOnMenu } from "@/components/menu/menu-types";
 import { DishTitle } from "@/components/menu/dish-title";
@@ -140,7 +141,7 @@ function MenuCover() {
   return (
     <section className="menu-cover">
       <div className="menu-cover-brand">
-        <span className="menu-cover-mark">G</span>
+        <BrandLogo size={72} className="menu-cover-mark" alt="" />
         <p className="menu-cover-name">La Grappa</p>
         <p className="menu-cover-tag">Restaurant italien</p>
       </div>

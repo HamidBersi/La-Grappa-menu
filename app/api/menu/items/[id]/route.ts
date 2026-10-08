@@ -6,6 +6,7 @@ import {
   parseOptionalPrice,
   parseRequiredPrice,
 } from "@/lib/menu-price";
+import { normalizeDishEmoji } from "@/lib/dish-emoji";
 
 const NAME_MAX = 120;
 const DESCRIPTION_MAX = 500;
@@ -15,10 +16,12 @@ type UpdateItemBody = {
   description?: string | null;
   price?: string;
   isAvailable?: boolean;
+  categoryId?: string;
   priceVerre?: string | null;
   priceQuart?: string | null;
   priceDemi?: string | null;
   priceBouteille?: string | null;
+  emoji?: string | null;
 };
 
 type RouteContext = {
@@ -44,10 +47,13 @@ export async function PATCH(request: Request, context: RouteContext) {
     description?: string | null;
     price?: string;
     isAvailable?: boolean;
+    categoryId?: string;
+    position?: number;
     priceVerre?: string | null;
     priceQuart?: string | null;
     priceDemi?: string | null;
     priceBouteille?: string | null;
+    emoji?: string | null;
   } = {};
 
   if (typeof input.name === "string") {
@@ -109,6 +115,28 @@ export async function PATCH(request: Request, context: RouteContext) {
     data.isAvailable = input.isAvailable;
   }
 
+  if (typeof input.categoryId === "string") {
+    const nextCategoryId = input.categoryId.trim();
+    const nextCategory = await prisma.menuCategory.findUnique({
+      where: { id: nextCategoryId },
+      select: { id: true },
+    });
+    if (!nextCategory) {
+      return NextResponse.json({ error: "Catégorie introuvable." }, { status: 404 });
+    }
+    const last = await prisma.menuItem.findFirst({
+      where: { categoryId: nextCategoryId },
+      orderBy: { position: "desc" },
+      select: { position: true },
+    });
+    data.categoryId = nextCategoryId;
+    data.position = (last?.position ?? -1) + 1;
+  }
+
+  if ("emoji" in input) {
+    data.emoji = normalizeDishEmoji(input.emoji);
+  }
+
   if (Object.keys(data).length === 0) {
     return NextResponse.json({ error: "Rien à modifier." }, { status: 400 });
   }
@@ -131,7 +159,10 @@ export async function DELETE(_request: Request, context: RouteContext) {
   const { id } = await context.params;
 
   try {
-    await prisma.menuItem.delete({ where: { id } });
+    await prisma.menuItem.update({
+      where: { id },
+      data: { isAvailable: false },
+    });
     return NextResponse.json({ success: true });
   } catch {
     return NextResponse.json({ error: "Plat introuvable." }, { status: 404 });

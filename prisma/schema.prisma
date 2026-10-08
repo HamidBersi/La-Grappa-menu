@@ -30,6 +30,8 @@ model MenuItem {
   priceQuart     String?
   priceDemi      String?
   priceBouteille String?
+  /** Pictos facultatifs devant le nom (piment, bio, végé, vegan) */
+  emoji          String?
   categoryId     String
   category       MenuCategory @relation(fields: [categoryId], references: [id])
   createdAt      DateTime     @default(now())
