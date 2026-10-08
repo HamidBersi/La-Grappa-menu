@@ -1,0 +1,37 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model MenuCategory {
+  id       String     @id @default(cuid())
+  name     String
+  position Int
+  /// "plats" | "desserts" — une seule carte pour l’instant : plats
+  menuType String     @default("plats")
+  items    MenuItem[]
+
+  @@index([menuType])
+}
+
+model MenuItem {
+  id          String  @id @default(cuid())
+  name        String
+  description String?
+  price       String
+  isAvailable Boolean @default(true)
+  position    Int
+  /** Tarifs vin (null = format non proposé) */
+  priceVerre     String?
+  priceQuart     String?
+  priceDemi      String?
+  priceBouteille String?
+  categoryId     String
+  category       MenuCategory @relation(fields: [categoryId], references: [id])
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+}
