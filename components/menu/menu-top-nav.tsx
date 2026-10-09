@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 
 import { BrandLogo } from "@/components/brand-logo";
+import { ItaliaBar } from "@/components/italia-bar";
 import {
   LOCALE_LABELS,
   MENU_LOCALES,
@@ -60,9 +61,14 @@ function goBack() {
 type MenuTopNavProps = {
   locale: MenuLocale;
   onLocaleChange: (locale: MenuLocale) => void;
+  showBack?: boolean;
 };
 
-export function MenuTopNav({ locale, onLocaleChange }: MenuTopNavProps) {
+export function MenuTopNav({
+  locale,
+  onLocaleChange,
+  showBack = false,
+}: MenuTopNavProps) {
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
   const ui = tUi(locale);
@@ -85,23 +91,28 @@ export function MenuTopNav({ locale, onLocaleChange }: MenuTopNavProps) {
   }, []);
 
   return (
-    <header className="relative z-[110] flex items-center justify-between gap-3 border-b border-[#e4dfd4] bg-[#F4F1EA]/95 px-4 py-3 backdrop-blur-sm sm:px-6">
-      <div className="flex min-w-0 items-center gap-3">
-        <button
-          type="button"
-          onClick={goBack}
-          aria-label={ui.backLabel}
-          className="shrink-0 rounded-full transition active:scale-95 hover:opacity-90"
-        >
-          <BrandLogo size={52} className="size-[52px]" />
-        </button>
+    <header className="relative z-[110] flex items-center justify-between gap-3 px-4 py-3.5 sm:px-6">
+      <div className="flex min-w-0 items-center gap-2.5">
+        {showBack ? (
+          <button
+            type="button"
+            onClick={goBack}
+            aria-label={ui.backLabel}
+            className="shrink-0 rounded-full transition active:scale-95 hover:opacity-90"
+          >
+            <BrandLogo size={44} className="size-11 ring-leaf/20" alt="" />
+          </button>
+        ) : (
+          <BrandLogo size={44} className="size-11 ring-leaf/20" />
+        )}
         <div className="min-w-0">
-          <p className="truncate font-[family-name:var(--font-cormorant)] text-[22px] leading-none font-semibold tracking-wide text-[#1E3A2F]">
+          <p className="truncate font-[family-name:var(--font-cormorant)] text-[23px] leading-none font-semibold text-leaf">
             La Grappa
           </p>
-          <p className="mt-1 truncate text-[10px] font-medium tracking-[0.18em] text-[#8a8578] uppercase">
+          <p className="mt-1 truncate text-[10px] font-medium tracking-[0.2em] text-wine/70 uppercase">
             {ui.tagline}
           </p>
+          <ItaliaBar className="mt-1.5 h-[3px] w-11" />
         </div>
       </div>
 
@@ -112,16 +123,17 @@ export function MenuTopNav({ locale, onLocaleChange }: MenuTopNavProps) {
           aria-label={ui.selectLanguage}
           aria-haspopup="listbox"
           aria-expanded={open}
-          className="flex h-10 items-center gap-1.5 rounded-full border border-[#e4dfd4] bg-white px-2.5 shadow-sm transition hover:border-[#D8B871]"
+          className="flex h-9 items-center gap-1.5 rounded-lg border border-ink/10 bg-white/80 px-2.5 text-[11px] font-semibold tracking-wide text-ink uppercase transition hover:border-wine/30"
         >
           <Flag locale={locale} />
+          {locale}
           <svg
             width="12"
             height="12"
             viewBox="0 0 12 12"
             fill="none"
             aria-hidden
-            className={`text-[#8a8578] transition ${open ? "rotate-180" : ""}`}
+            className={`text-ink/45 transition ${open ? "rotate-180" : ""}`}
           >
             <path
               d="M2.5 4.5L6 8L9.5 4.5"
@@ -136,7 +148,7 @@ export function MenuTopNav({ locale, onLocaleChange }: MenuTopNavProps) {
         {open ? (
           <ul
             role="listbox"
-            className="absolute right-0 z-[120] mt-2 min-w-[168px] overflow-hidden rounded-xl border border-[#e4dfd4] bg-white py-1 shadow-lg"
+            className="absolute right-0 z-[120] mt-2 min-w-[168px] overflow-hidden rounded-xl border border-ink/8 bg-white py-1 shadow-[0_12px_32px_rgba(31,26,23,0.12)]"
           >
             {MENU_LOCALES.map((code) => {
               const active = code === locale;
@@ -150,8 +162,8 @@ export function MenuTopNav({ locale, onLocaleChange }: MenuTopNavProps) {
                     }}
                     className={`flex w-full items-center gap-3 px-3 py-2.5 text-left text-sm transition ${
                       active
-                        ? "bg-[#F4F1EA] font-medium text-[#1E3A2F]"
-                        : "text-[#1B1E19] hover:bg-[#FBF8F1]"
+                        ? "bg-paper font-medium text-wine"
+                        : "text-ink hover:bg-paper/80"
                     }`}
                   >
                     <Flag locale={code} />

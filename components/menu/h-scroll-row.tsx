@@ -15,7 +15,7 @@ type HScrollRowProps = {
 export function HScrollRow({
   children,
   className = "",
-  fadeFromClass = "from-[#F4F1EA]",
+  fadeFromClass = "from-paper",
   wrapAt = "lg",
 }: HScrollRowProps) {
   const scrollerRef = useRef<HTMLDivElement>(null);

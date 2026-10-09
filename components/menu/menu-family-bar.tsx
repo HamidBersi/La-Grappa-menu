@@ -82,7 +82,7 @@ export function MenuFamilyBar({
   onSubCategoryChange,
   categoryNames,
   showSubAllTab = true,
-  fadeFromClass = "from-[#F4F1EA]",
+  fadeFromClass = "from-paper",
   locale = "fr",
   showIcons = false,
 }: MenuFamilyBarProps) {
@@ -150,7 +150,7 @@ export function MenuFamilyBar({
         {familyChips}
       </HScrollRow>
       {showSubRow ? (
-        <div className="mt-2 border-t border-[#e4dfd4] pt-1.5">
+        <div className="mt-2.5 border-t border-ink/8 pt-2">
           <HScrollRow wrapAt="never" className="gap-x-1.5 pr-10" fadeFromClass={fadeFromClass}>
             {subTabs}
           </HScrollRow>
@@ -178,10 +178,10 @@ function FamilyChip({
       type="button"
       title={title}
       onClick={onClick}
-      className={`inline-flex shrink-0 items-center gap-1.5 rounded-full border px-3.5 py-1.5 text-sm font-medium transition ${
+      className={`inline-flex shrink-0 items-center gap-1.5 rounded-lg px-3.5 py-1.5 text-[13px] font-medium tracking-wide transition ${
         active
-          ? "border-[#1E3A2F] bg-[#1E3A2F] text-[#FBF8F1]"
-          : "border-[#e4dfd4] bg-[#fbf8f1] text-[#3d3a32] hover:border-[#1E3A2F]/25"
+          ? "bg-leaf text-white shadow-[0_1px_0_rgba(0,146,70,0.35)]"
+          : "bg-white/70 text-ink/75 ring-1 ring-ink/8 hover:text-ink hover:ring-leaf/30"
       }`}
     >
       {Icon ? <Icon className="size-4" /> : null}
@@ -203,10 +203,10 @@ function SubTab({
     <button
       type="button"
       onClick={onClick}
-      className={`shrink-0 border-b-2 px-3 py-1.5 text-[15px] transition ${
+      className={`shrink-0 border-b-2 px-3 py-1.5 text-[13.5px] tracking-wide transition ${
         selected
-          ? "border-[#1E3A2F] font-semibold text-[#1E3A2F]"
-          : "border-transparent text-[#6b675c] hover:text-[#1B1E19]"
+          ? "border-leaf font-semibold text-leaf"
+          : "border-transparent text-ink/50 hover:text-ink"
       }`}
     >
       {label}

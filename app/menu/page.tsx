@@ -30,7 +30,7 @@ export default function PublicMenuPage() {
   }, []);
 
   return (
-    <main className="min-h-dvh min-w-0 flex-1 bg-[#F4F1EA] text-[#1B1E19]">
+    <main className="min-h-dvh min-w-0 flex-1 bg-paper text-ink">
       {loadState === "loading" ? <MenuLoading /> : null}
       {loadState === "error" ? (
         <p className="p-8 text-center text-sm text-red-700">

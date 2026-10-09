@@ -131,17 +131,17 @@ export function PinScreen({
   };
 
   return (
-    <div className="relative flex min-h-full flex-1 items-center justify-center overflow-hidden bg-[#F7F2E7] p-6">
+    <div className="relative flex min-h-full flex-1 items-center justify-center overflow-hidden bg-paper p-6">
       <div className="relative w-full max-w-md">
-        <div className="rounded-xl border border-[#D9CFB8] bg-white p-8">
+        <div className="rounded-2xl border border-ink/8 bg-white p-8 shadow-[0_16px_40px_rgba(31,26,23,0.06)]">
           <div className="mb-8 text-center">
             <div className="mx-auto mb-4 w-fit">
               <BrandLogo size={72} className="size-[72px]" />
             </div>
-            <h1 className="font-[family-name:var(--font-cormorant)] text-4xl font-semibold tracking-tight text-[#1B1E19]">
+            <h1 className="font-[family-name:var(--font-cormorant)] text-4xl font-semibold tracking-tight text-leaf">
               La Grappa
             </h1>
-            <p className="mt-2 text-sm text-[#6b6a5f]">{subtitle}</p>
+            <p className="mt-2 text-sm text-ink/55">{subtitle}</p>
           </div>
 
           <div className="space-y-6">
@@ -161,11 +161,11 @@ export function PinScreen({
                   onKeyDown={(event) => handleKeyDown(index, event)}
                   onPaste={handlePaste}
                   aria-label={`Chiffre ${index + 1}`}
-                  className={`h-12 w-10 rounded-md border bg-[#FBF8F1] text-center text-lg font-semibold tracking-widest outline-none sm:h-14 sm:w-12 ${
+                  className={`h-12 w-10 rounded-lg border bg-paper text-center text-lg font-semibold tracking-widest outline-none sm:h-14 sm:w-12 ${
                     digit
-                      ? "border-[#1E3A2F]/40 bg-white"
-                      : "border-[#D9CFB8]"
-                  } focus:border-[#1E3A2F] focus:ring-2 focus:ring-[#1E3A2F]/15`}
+                      ? "border-leaf/40 bg-white"
+                      : "border-ink/12"
+                  } focus:border-leaf focus:ring-2 focus:ring-leaf/15`}
                 />
               ))}
             </div>
@@ -174,7 +174,7 @@ export function PinScreen({
             ) : null}
             <button
               type="button"
-              className="h-11 w-full rounded-md bg-[#B68A3D] font-semibold text-[#1E3A2F] hover:bg-[#D8B871] disabled:opacity-60"
+              className="h-11 w-full rounded-lg bg-leaf font-semibold text-white hover:bg-[#007a3b] disabled:opacity-60"
               onClick={() => void validate(digits.join(""))}
               disabled={isSubmitting}
             >

@@ -3,7 +3,6 @@
 import { useEffect, useMemo, useState } from "react";
 
 import {
-  tFamily,
   tUi,
   translateCategoryName,
   translateItem,
@@ -27,6 +26,8 @@ import {
 
 type DigitalMenuProps = {
   categories: MenuCategoryDto[];
+  /** Aperçu admin : pas de bouton retour */
+  embedded?: boolean;
 };
 
 function splitNameAndVolume(name: string): { title: string; volume: string | null } {
@@ -35,10 +36,11 @@ function splitNameAndVolume(name: string): { title: string; volume: string | nul
   return { title: match[1], volume: match[2].replace(/\s+/g, "") };
 }
 
-export function DigitalMenu({ categories }: DigitalMenuProps) {
+export function DigitalMenu({ categories, embedded = false }: DigitalMenuProps) {
   const [familyId, setFamilyId] = useState<MenuFamilyId>("all");
   const [subCategoryName, setSubCategoryName] = useState<string | null>(null);
   const [locale, setLocale] = useState<MenuLocale>("fr");
+  const [showBack, setShowBack] = useState(false);
   const ui = tUi(locale);
 
   useEffect(() => {
@@ -46,6 +48,15 @@ export function DigitalMenu({ categories }: DigitalMenuProps) {
     setLocale(stored);
     document.documentElement.lang = stored;
   }, []);
+
+  useEffect(() => {
+    if (embedded) {
+      setShowBack(false);
+      return;
+    }
+    const fromApp = new URLSearchParams(window.location.search).get("from") === "app";
+    setShowBack(fromApp);
+  }, [embedded]);
 
   function handleLocaleChange(next: MenuLocale) {
     setLocale(next);
@@ -76,49 +87,30 @@ export function DigitalMenu({ categories }: DigitalMenuProps) {
     }
 
     if (activeFamily) {
-      return sectionsForFamily(activeFamily).map((category) => ({
-        category,
-        family: activeFamily,
-      }));
+      return sectionsForFamily(activeFamily);
     }
 
-    const grouped = MENU_FAMILIES.flatMap((family) =>
-      sectionsForFamily(family).map((category) => ({ category, family })),
-    );
-
+    const grouped = MENU_FAMILIES.flatMap((family) => sectionsForFamily(family));
     const named = new Set(MENU_FAMILIES.flatMap((family) => family.categoryNames));
-    const leftovers = available
-      .filter((category) => !named.has(category.name))
-      .map((category) => ({
-        category,
-        family: {
-          id: "piatti" as const,
-          label: "",
-          categoryNames: [] as string[],
-          countNoun: tFamily(locale, "piatti").countNoun,
-        },
-      }));
+    const leftovers = available.filter((category) => !named.has(category.name));
 
     return [...grouped, ...leftovers];
-  }, [activeFamily, categories, locale, subCategoryName]);
+  }, [activeFamily, categories, subCategoryName]);
 
   function selectFamily(next: MenuFamilyId) {
     setFamilyId(next);
     setSubCategoryName(null);
   }
 
-  function countNounFor(family: MenuFamily): string {
-    if (!family.id || family.id === ("all" as string)) {
-      return tFamily(locale, "piatti").countNoun;
-    }
-    return tFamily(locale, family.id).countNoun;
-  }
-
   return (
-    <div className="mx-auto min-h-full w-full min-w-0 max-w-2xl pb-24">
-      <div className="sticky top-0 z-30 min-w-0 bg-[#F4F1EA]/95 backdrop-blur-sm">
-        <MenuTopNav locale={locale} onLocaleChange={handleLocaleChange} />
-        <div className="min-w-0 px-4 py-3 sm:px-6">
+    <div className="mx-auto min-h-full w-full min-w-0 max-w-3xl pb-24">
+      <div className="sticky top-0 z-30 min-w-0 border-b border-ink/6 bg-paper/90 backdrop-blur-md">
+        <MenuTopNav
+          locale={locale}
+          onLocaleChange={handleLocaleChange}
+          showBack={showBack}
+        />
+        <div className="min-w-0 px-4 pb-3 sm:px-6">
           <MenuFamilyBar
             familyId={familyId}
             onFamilyChange={selectFamily}
@@ -130,22 +122,22 @@ export function DigitalMenu({ categories }: DigitalMenuProps) {
         </div>
       </div>
 
-      <div className="mt-6 space-y-10 overflow-x-hidden px-4 sm:px-6">
+      <div className="mt-5 space-y-5 overflow-x-hidden px-4 sm:mt-7 sm:px-6">
         {visibleSections.length === 0 ? (
-          <p className="text-center text-sm text-[#6b675c]">{ui.emptyCategory}</p>
+          <p className="py-16 text-center text-sm text-ink/55">{ui.emptyCategory}</p>
         ) : (
-          visibleSections.map(({ category, family }) => (
-            <section key={category.id}>
-              <div className="mb-4 flex min-w-0 items-baseline justify-between gap-3">
-                <h2 className="min-w-0 flex-1 font-[family-name:var(--font-cormorant)] text-[28px] leading-none font-bold italic text-[#8F6A24]">
+          visibleSections.map((category) => (
+            <section
+              key={category.id}
+              className="overflow-hidden rounded-2xl bg-white/85 shadow-[0_8px_28px_rgba(31,26,23,0.05)] ring-1 ring-ink/6"
+            >
+              <header className="border-b border-ink/6 px-5 pt-5 pb-3.5 sm:px-6">
+                <h2 className="min-w-0 font-[family-name:var(--font-cormorant)] text-[26px] leading-none font-semibold text-leaf">
                   {translateCategoryName(category.name, locale)}
                 </h2>
-                <span className="shrink-0 text-[13px] text-[#8a8578]">
-                  {category.items.length} {countNounFor(family)}
-                </span>
-              </div>
+              </header>
 
-              <div className="space-y-5">
+              <div className="divide-y divide-ink/6 px-5 sm:px-6">
                 {category.items.map((item) => (
                   <DishRow key={item.id} item={item} locale={locale} />
                 ))}
@@ -173,21 +165,17 @@ function WineRow({ item, locale }: { item: MenuItemDto; locale: MenuLocale }) {
   });
 
   return (
-    <article className="min-w-0">
-      <div className="flex min-w-0 items-baseline gap-2">
-        <h3 className="min-w-0 text-[15.5px] font-semibold break-words text-[#1B1E19]">
+    <article className="min-w-0 py-3.5">
+      <div className="flex min-w-0 items-start justify-between gap-4">
+        <h3 className="min-w-0 text-[15.5px] leading-snug font-medium break-words text-ink">
           <DishTitle name={translated.name} emoji={item.emoji} />
         </h3>
-        <span
-          className="mb-1 min-w-[1.25rem] flex-1 border-b border-dotted border-[#cfc8b8]"
-          aria-hidden
-        />
-        <span className="shrink-0 text-[15px] font-semibold tabular-nums text-[#1B1E19]">
+        <span className="shrink-0 pt-0.5 text-[15px] font-semibold tabular-nums text-wine">
           {formatEuro(headline)}
         </span>
       </div>
       {formats.length > 0 ? (
-        <p className="mt-1 flex flex-wrap gap-x-3.5 gap-y-0.5 text-[13px] font-normal text-[#7a766c]">
+        <p className="mt-1 flex flex-wrap gap-x-3 gap-y-0.5 text-[12.5px] text-ink/50">
           {formats.map((column) => (
             <span key={column.key} className="tabular-nums">
               {column.label} {formatEuro(item[column.key])}
@@ -196,7 +184,7 @@ function WineRow({ item, locale }: { item: MenuItemDto; locale: MenuLocale }) {
         </p>
       ) : null}
       {translated.description ? (
-        <p className="mt-1 max-w-[92%] text-[13px] leading-snug text-[#7a766c]">
+        <p className="mt-1 max-w-[36rem] text-[13px] leading-relaxed text-ink/55">
           {translated.description}
         </p>
       ) : null}
@@ -213,24 +201,20 @@ function DishRow({ item, locale }: { item: MenuItemDto; locale: MenuLocale }) {
   const { title, volume } = splitNameAndVolume(translated.name);
 
   return (
-    <article className="min-w-0">
-      <div className="flex min-w-0 items-baseline gap-2">
-        <h3 className="min-w-0 text-[15.5px] font-semibold break-words text-[#1B1E19]">
+    <article className="min-w-0 py-3.5">
+      <div className="flex min-w-0 items-start justify-between gap-4">
+        <h3 className="min-w-0 text-[15.5px] leading-snug font-medium break-words text-ink">
           <DishTitle name={title} emoji={item.emoji} />
           {volume ? (
-            <span className="ml-1.5 font-normal text-[#8a8578]">{volume}</span>
+            <span className="ml-1.5 font-normal text-ink/45">{volume}</span>
           ) : null}
         </h3>
-        <span
-          className="mb-1 min-w-[1.25rem] flex-1 border-b border-dotted border-[#cfc8b8]"
-          aria-hidden
-        />
-        <span className="shrink-0 text-[15px] font-semibold tabular-nums text-[#1B1E19]">
+        <span className="shrink-0 pt-0.5 text-[15px] font-semibold tabular-nums text-wine">
           {formatEuro(item.price)}
         </span>
       </div>
       {translated.description ? (
-        <p className="mt-0.5 max-w-[92%] text-[13px] leading-snug text-[#7a766c]">
+        <p className="mt-1 max-w-[36rem] text-[13px] leading-relaxed text-ink/55">
           {translated.description}
         </p>
       ) : null}

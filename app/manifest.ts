@@ -7,8 +7,8 @@ export default function manifest(): MetadataRoute.Manifest {
     description: "Carte digitale du restaurant La Grappa",
     start_url: "/menu",
     display: "standalone",
-    background_color: "#F4F1EA",
-    theme_color: "#1E3A2F",
+    background_color: "#F7F4EF",
+    theme_color: "#009246",
     orientation: "any",
     icons: [
       {

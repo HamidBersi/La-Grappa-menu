@@ -179,8 +179,9 @@ export function slicePrintPagesFromDom(
       "";
     const titleEl = categoryEl.querySelector<HTMLElement>(".menu-cat-title");
     const thead = categoryEl.querySelector<HTMLElement>(".wine-table thead");
-    const headingHeight =
-      (titleEl?.offsetHeight ?? 0) + (thead?.offsetHeight ?? 0) + 12;
+    const titleHeight = (titleEl?.offsetHeight ?? 0) + 12;
+    const theadHeight = thead?.offsetHeight ?? 0;
+    const headingHeight = titleHeight + theadHeight;
     const blockEls = [
       ...categoryEl.querySelectorAll<HTMLElement>("[data-item-id]"),
     ];
@@ -216,8 +217,13 @@ export function slicePrintPagesFromDom(
         flush();
       }
 
-      const needHeading = !startedOnThisPage;
-      const addHeight = (needHeading ? headingHeight : 0) + blockHeight;
+      const continuation = index > 0;
+      const extraHeading = !startedOnThisPage
+        ? continuation
+          ? theadHeight
+          : headingHeight
+        : 0;
+      const addHeight = extraHeading + blockHeight;
 
       if (used > 0 && used + addHeight > pageHeightPx) {
         flush();
@@ -228,10 +234,10 @@ export function slicePrintPagesFromDom(
         sections.push({
           categoryId,
           categoryName,
-          continuation: index > 0,
+          continuation,
           items: [],
         });
-        used += headingHeight;
+        used += continuation ? theadHeight : headingHeight;
         startedOnThisPage = true;
       }
 

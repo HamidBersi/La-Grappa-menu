@@ -10,7 +10,7 @@ export default function MenuPortalPage() {
     >
       <nav className="mt-12 grid w-full gap-4" aria-label="Choix menu">
         <PortalCard
-          href="/menu"
+          href="/menu?from=app"
           emoji="👁️"
           title="Voir le menu"
           description="Aperçu public — QR, tablette, clients."

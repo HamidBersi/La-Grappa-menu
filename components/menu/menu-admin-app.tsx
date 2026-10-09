@@ -79,7 +79,7 @@ const emptyForm: DishFormState = {
 };
 
 const fieldClass =
-  "h-10 w-full rounded-lg border border-[#D9CFB8] bg-[#FBF8F1] px-2.5 text-base outline-none focus:border-[#1E3A2F]/40";
+  "h-10 w-full rounded-lg border border-[#D9CFB8] bg-[#FBF8F1] px-2.5 text-base outline-none focus:border-leaf/40";
 
 export function MenuAdminApp() {
   const logout = useOwnerLogout();
@@ -512,15 +512,15 @@ export function MenuAdminApp() {
     modifiedPages.every((page) => printSelection.includes(page));
 
   return (
-    <div className="menu-admin-root flex min-h-dvh flex-1 flex-col bg-[#F7F2E7] text-[#1B1E19]">
-      <header className="menu-admin-chrome shrink-0 bg-[#1E3A2F] text-[#FBF8F1]">
+    <div className="menu-admin-root flex min-h-dvh flex-1 flex-col bg-paper text-ink">
+      <header className="menu-admin-chrome shrink-0 bg-leaf text-white">
         <div className="flex items-center justify-between gap-3 px-5 py-3.5">
           <div className="flex min-w-0 items-center gap-2.5">
-            <BrandLogo size={36} className="size-9 ring-[#D8B871]/40" alt="" />
+            <BrandLogo size={36} className="size-9 ring-white/35" alt="" />
             <span className="font-[family-name:var(--font-cormorant)] text-[22px] tracking-wide">
               Le Menu
             </span>
-            <span className="hidden text-xs tracking-wide text-[#D8B871] sm:inline">
+            <span className="hidden text-xs tracking-wide text-white/75 sm:inline">
               espace admin
             </span>
           </div>
@@ -532,7 +532,7 @@ export function MenuAdminApp() {
                 onClick={() => setView("edit")}
                 className={`rounded-md px-3.5 py-2 text-sm transition ${
                   view === "edit"
-                    ? "bg-[#B68A3D] font-semibold text-[#1E3A2F]"
+                    ? "bg-white font-semibold text-leaf"
                     : "text-[#FBF8F1] hover:bg-white/10"
                 }`}
               >
@@ -543,7 +543,7 @@ export function MenuAdminApp() {
                 onClick={() => setView("preview")}
                 className={`rounded-md px-3.5 py-2 text-sm transition ${
                   view === "preview"
-                    ? "bg-[#B68A3D] font-semibold text-[#1E3A2F]"
+                    ? "bg-white font-semibold text-leaf"
                     : "text-[#FBF8F1] hover:bg-white/10"
                 }`}
               >
@@ -552,7 +552,7 @@ export function MenuAdminApp() {
             </div>
             <button
               type="button"
-              className="inline-flex items-center gap-1.5 rounded-md border border-[#D8B871]/70 px-3 py-2 text-[13px] text-[#FBF8F1] transition hover:bg-white/10"
+              className="inline-flex items-center gap-1.5 rounded-md border border-white/40 px-3 py-2 text-[13px] text-white transition hover:bg-white/10"
               onClick={openPrintModal}
             >
               <Printer className="size-3.5" />
@@ -560,7 +560,7 @@ export function MenuAdminApp() {
             </button>
             <button
               type="button"
-              className="inline-flex items-center gap-1.5 rounded-md bg-[#B68A3D] px-3 py-2 text-[13px] font-semibold text-[#1E3A2F] transition hover:bg-[#D8B871]"
+              className="inline-flex items-center gap-1.5 rounded-md bg-white px-3 py-2 text-[13px] font-semibold text-leaf transition hover:bg-white/90"
               onClick={() => setQrOpen(true)}
             >
               <QrCode className="size-3.5" />
@@ -568,7 +568,7 @@ export function MenuAdminApp() {
             </button>
             <button
               type="button"
-              className="inline-flex items-center gap-1.5 rounded-md border border-[#D8B871]/50 bg-transparent px-3 py-2 text-[13px] text-[#FBF8F1] hover:bg-white/10"
+              className="inline-flex items-center gap-1.5 rounded-md border border-white/35 bg-transparent px-3 py-2 text-[13px] text-white hover:bg-white/10"
               onClick={logout}
             >
               <LogOut className="size-4" />
@@ -598,7 +598,7 @@ export function MenuAdminApp() {
                 }}
                 className={`flex-1 rounded-md px-3 py-2 text-sm transition ${
                   view === "edit"
-                    ? "bg-[#B68A3D] font-semibold text-[#1E3A2F]"
+                    ? "bg-white font-semibold text-leaf"
                     : "text-[#FBF8F1]"
                 }`}
               >
@@ -612,7 +612,7 @@ export function MenuAdminApp() {
                 }}
                 className={`flex-1 rounded-md px-3 py-2 text-sm transition ${
                   view === "preview"
-                    ? "bg-[#B68A3D] font-semibold text-[#1E3A2F]"
+                    ? "bg-white font-semibold text-leaf"
                     : "text-[#FBF8F1]"
                 }`}
               >
@@ -621,7 +621,7 @@ export function MenuAdminApp() {
             </div>
             <button
               type="button"
-              className="flex w-full items-center justify-center gap-1.5 rounded-md border border-[#D8B871]/70 px-3 py-2.5 text-[13px]"
+              className="flex w-full items-center justify-center gap-1.5 rounded-md border border-white/40 px-3 py-2.5 text-[13px]"
               onClick={() => {
                 setNavOpen(false);
                 openPrintModal();
@@ -632,7 +632,7 @@ export function MenuAdminApp() {
             </button>
             <button
               type="button"
-              className="flex w-full items-center justify-center gap-1.5 rounded-md bg-[#B68A3D] px-3 py-2.5 text-[13px] font-semibold text-[#1E3A2F]"
+              className="flex w-full items-center justify-center gap-1.5 rounded-md bg-white px-3 py-2.5 text-[13px] font-semibold text-leaf"
               onClick={() => {
                 setNavOpen(false);
                 setQrOpen(true);
@@ -643,7 +643,7 @@ export function MenuAdminApp() {
             </button>
             <button
               type="button"
-              className="flex w-full items-center justify-center gap-1.5 rounded-md border border-[#D8B871]/50 px-3 py-2.5 text-[13px]"
+              className="flex w-full items-center justify-center gap-1.5 rounded-md border border-white/35 px-3 py-2.5 text-[13px]"
               onClick={logout}
             >
               <LogOut className="size-4" />
@@ -654,8 +654,8 @@ export function MenuAdminApp() {
       </header>
 
       {view === "edit" ? (
-        <div className="flex min-h-0 flex-1 flex-col bg-[#F4F1EA]">
-          <div className="menu-admin-chrome sticky top-0 z-20 shrink-0 border-b border-[#e4dfd4] bg-[#F4F1EA]/95 px-4 py-3 backdrop-blur-sm sm:px-6">
+        <div className="flex min-h-0 flex-1 flex-col bg-paper">
+          <div className="menu-admin-chrome sticky top-0 z-20 shrink-0 border-b border-ink/8 bg-paper/95 px-4 py-3 backdrop-blur-sm sm:px-6">
             <div className="mx-auto min-w-0 max-w-2xl">
               <MenuFamilyBar
                 familyId={familyId}
@@ -666,7 +666,7 @@ export function MenuAdminApp() {
                   (category) => category.name,
                 )}
                 showSubAllTab={false}
-                fadeFromClass="from-[#F4F1EA]"
+                fadeFromClass="from-paper"
               />
             </div>
           </div>
@@ -677,13 +677,13 @@ export function MenuAdminApp() {
             ) : (
               <div className="mx-auto w-full min-w-0 max-w-2xl">
                 <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
-                  <h2 className="font-[family-name:var(--font-cormorant)] text-[28px] font-bold italic text-[#8F6A24]">
+                  <h2 className="font-[family-name:var(--font-cormorant)] text-[28px] font-semibold text-leaf">
                     {selectedCategory?.name ?? "Aucune catégorie"}
                   </h2>
                   <button
                     type="button"
                     onClick={openCreate}
-                    className="inline-flex items-center gap-1.5 rounded-md bg-[#B68A3D] px-4 py-2.5 text-[13.5px] font-semibold text-[#1E3A2F] transition hover:bg-[#D8B871]"
+                    className="inline-flex items-center gap-1.5 rounded-md bg-leaf px-4 py-2.5 text-[13.5px] font-semibold text-white transition hover:bg-[#007a3b]"
                   >
                     <Plus className="size-4" />
                     Ajouter un plat
@@ -723,11 +723,11 @@ export function MenuAdminApp() {
           </section>
         </div>
       ) : (
-        <div className="flex min-h-0 flex-1 flex-col bg-[#F4F1EA]">
+        <div className="flex min-h-0 flex-1 flex-col bg-paper">
           <div
             className={`flex-1 overflow-y-auto print:hidden ${printSlices !== null ? "hidden" : ""}`}
           >
-            <DigitalMenu categories={categories} />
+            <DigitalMenu categories={categories} embedded />
           </div>
           <div
             className={
@@ -762,7 +762,7 @@ export function MenuAdminApp() {
                   enabled={isCreating}
                   onSelect={applyDeletedHit}
                 >
-                  <div className="flex h-10 w-full items-center rounded-lg border border-[#D9CFB8] bg-[#FBF8F1] pl-2.5 pr-1 focus-within:border-[#1E3A2F]/40">
+                  <div className="flex h-10 w-full items-center rounded-lg border border-[#D9CFB8] bg-[#FBF8F1] pl-2.5 pr-1 focus-within:border-leaf/40">
                     <input
                       value={form.name}
                       onChange={(event) => {
@@ -808,7 +808,7 @@ export function MenuAdminApp() {
                     }))
                   }
                   placeholder="Ex. Sauce Gorgonzola…"
-                  className="min-h-[60px] w-full rounded-lg border border-[#D9CFB8] bg-[#FBF8F1] px-2.5 py-2 text-base outline-none focus:border-[#1E3A2F]/40"
+                  className="min-h-[60px] w-full rounded-lg border border-[#D9CFB8] bg-[#FBF8F1] px-2.5 py-2 text-base outline-none focus:border-leaf/40"
                 />
               </label>
 
@@ -894,7 +894,7 @@ export function MenuAdminApp() {
                 type="button"
                 disabled={saving}
                 onClick={() => void saveDish()}
-                className="rounded-md bg-[#1E3A2F] px-4 py-2 text-[13.5px] font-semibold text-[#FBF8F1] hover:bg-[#2C5142] disabled:opacity-60"
+                className="rounded-md bg-leaf px-4 py-2 text-[13.5px] font-semibold text-white hover:bg-[#007a3b] disabled:opacity-60"
               >
                 {saving ? "Enregistrement…" : "Enregistrer"}
               </button>
@@ -929,7 +929,7 @@ export function MenuAdminApp() {
                       selectAllPrintPages();
                     }
                   }}
-                  className="size-4 accent-[#1E3A2F]"
+                  className="size-4 accent-leaf"
                 />
                 <span className="text-sm font-medium">Tout</span>
               </label>
@@ -945,7 +945,7 @@ export function MenuAdminApp() {
                       selectModifiedPrintPages();
                     }
                   }}
-                  className="size-4 accent-[#1E3A2F]"
+                  className="size-4 accent-leaf"
                 />
                 <span className="text-sm font-medium">
                   Imprimer les pages modifiées
@@ -972,7 +972,7 @@ export function MenuAdminApp() {
                           type="checkbox"
                           checked={checked}
                           onChange={() => togglePrintPage(slice.page)}
-                          className="size-4 accent-[#1E3A2F]"
+                          className="size-4 accent-leaf"
                         />
                         <span className="flex-1 text-sm font-medium">
                           Page {slice.page}
@@ -999,7 +999,7 @@ export function MenuAdminApp() {
               <button
                 type="button"
                 onClick={handlePrintSelection}
-                className="rounded-md bg-[#1E3A2F] px-4 py-2 text-[13.5px] font-semibold text-[#FBF8F1]"
+                className="rounded-md bg-leaf px-4 py-2 text-[13.5px] font-semibold text-white"
               >
                 Imprimer
               </button>
@@ -1035,7 +1035,7 @@ export function MenuAdminApp() {
               <button
                 type="button"
                 onClick={() => setQrOpen(false)}
-                className="rounded-md bg-[#1E3A2F] px-4 py-2 text-[13.5px] font-semibold text-[#FBF8F1]"
+                className="rounded-md bg-leaf px-4 py-2 text-[13.5px] font-semibold text-white"
               >
                 Fermer
               </button>
@@ -1067,7 +1067,7 @@ export function MenuAdminApp() {
             >
               Supprimer ce plat ?
             </h3>
-            <p className="mt-2 font-[family-name:var(--font-cormorant)] text-[20px] leading-snug italic text-[#8F6A24]">
+            <p className="mt-2 font-[family-name:var(--font-cormorant)] text-[20px] leading-snug text-leaf">
               {pendingDelete.name}
             </p>
             <p
@@ -1139,7 +1139,7 @@ function SortableMenuItem({
       <div className="flex min-w-0 items-start gap-2.5">
         <button
           type="button"
-          className="mt-0.5 shrink-0 cursor-grab touch-none rounded-md border border-[#D9CFB8] bg-white p-1.5 text-[#8a8578] hover:border-[#1E3A2F]/30 hover:text-[#1E3A2F] active:cursor-grabbing disabled:cursor-not-allowed disabled:opacity-50"
+          className="mt-0.5 shrink-0 cursor-grab touch-none rounded-md border border-[#D9CFB8] bg-white p-1.5 text-[#8a8578] hover:border-leaf/30 hover:text-leaf active:cursor-grabbing disabled:cursor-not-allowed disabled:opacity-50"
           aria-label="Déplacer le plat"
           disabled={disabled}
           {...attributes}
@@ -1151,7 +1151,7 @@ function SortableMenuItem({
           <h3 className="min-w-0 flex-1 break-words font-[family-name:var(--font-cormorant)] text-[19px] font-semibold leading-snug">
             <DishTitle name={item.name} emoji={item.emoji} />
           </h3>
-          <span className="shrink-0 font-semibold text-[#1E3A2F]">
+          <span className="shrink-0 font-semibold text-leaf">
             {item.price} €
           </span>
         </div>
@@ -1178,7 +1178,7 @@ function SortableMenuItem({
       <div className="mt-2 flex justify-end gap-2 border-t border-[#EFE8DC] pt-2.5">
         <button
           type="button"
-          className="rounded-md border border-[#D9CFB8] bg-[#FBF8F1] px-3 py-1.5 text-[13px] font-semibold text-[#1E3A2F] transition hover:border-[#1E3A2F]/35 hover:bg-white"
+          className="rounded-md border border-[#D9CFB8] bg-[#FBF8F1] px-3 py-1.5 text-[13px] font-semibold text-leaf transition hover:border-leaf/35 hover:bg-white"
           onClick={onEdit}
         >
           Modifier

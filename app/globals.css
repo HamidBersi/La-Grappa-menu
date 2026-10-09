@@ -2,13 +2,23 @@
 @import "tw-animate-css";
 
 :root {
-  --background: #f4f1ea;
-  --foreground: #1b1e19;
+  --background: #f7f4ef;
+  --foreground: #1c1a17;
+  --paper: #f7f4ef;
+  --ink: #1c1a17;
+  --leaf: #009246;
+  --wine: #ce2b37;
+  --gold: #ce2b37;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-paper: var(--paper);
+  --color-ink: var(--ink);
+  --color-wine: var(--wine);
+  --color-leaf: var(--leaf);
+  --color-gold: var(--gold);
   --font-sans: var(--font-plus-jakarta), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-geist-mono);
 }
@@ -16,7 +26,7 @@
 html,
 body {
   min-height: 100%;
-  background: #f4f1ea;
+  background: #f7f4ef;
 }
 
 body {
@@ -56,7 +66,7 @@ select {
   font-size: 2.75rem;
   font-weight: 600;
   letter-spacing: 0.04em;
-  color: #1e3a2f;
+  color: #009246;
 }
 
 .menu-cover-tag {
@@ -69,7 +79,7 @@ select {
 }
 
 .menu-cover-frame {
-  border: 2.5px solid #e56a45;
+  border: 2.5px solid #ce2b37;
   border-radius: 2.25rem;
   padding: 2rem 1.75rem;
   color: #1b1e19;
@@ -237,7 +247,7 @@ select {
     font-size: 28px !important;
     font-weight: 700 !important;
     font-style: italic !important;
-    color: #8f6a24 !important;
+    color: #009246 !important;
   }
 
   .menu-cover-mark {

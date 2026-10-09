@@ -1,4 +1,5 @@
 import { BrandLogo } from "@/components/brand-logo";
+import { ItaliaBar } from "@/components/italia-bar";
 import type { MenuCategoryDto, MenuItemDto } from "@/components/menu/menu-types";
 import { isListedOnMenu } from "@/components/menu/menu-types";
 import { DishTitle } from "@/components/menu/dish-title";
@@ -109,6 +110,7 @@ function DishBlock({ item }: { item: MenuItemDto }) {
 
 function CategoryBlock({
   category,
+  continuation = false,
 }: {
   category: MenuCategoryDto;
   continuation?: boolean;
@@ -119,10 +121,12 @@ function CategoryBlock({
 
   return (
     <section className="menu-cat" data-category-id={category.id}>
-      <h2 className="menu-cat-title mb-3 flex items-center gap-3 font-[family-name:var(--font-cormorant)] text-[28px] font-bold italic leading-none text-[#8F6A24]">
-        <span>{category.name}</span>
-        <span className="h-px flex-1 bg-[#D9CFB8]" aria-hidden />
-      </h2>
+      {continuation ? null : (
+        <h2 className="menu-cat-title mb-3 flex items-center gap-3 font-[family-name:var(--font-cormorant)] text-[28px] font-semibold leading-none text-leaf">
+          <span>{category.name}</span>
+          <span className="h-px flex-1 bg-[#D9CFB8]" aria-hidden />
+        </h2>
+      )}
 
       {asWineTable ? (
         <WineTable items={wineItems} />
@@ -211,10 +215,10 @@ export function MenuSheet({
         <MenuCover />
       ) : (
         <header className="menu-sheet-header mb-9 text-center">
-          <h1 className="font-[family-name:var(--font-cormorant)] text-[42px] leading-none font-semibold text-[#1E3A2F] sm:text-[44px]">
+          <h1 className="font-[family-name:var(--font-cormorant)] text-[42px] leading-none font-semibold text-leaf sm:text-[44px]">
             {restaurantName}
           </h1>
-          <div className="mx-auto my-3.5 h-0.5 w-[70px] bg-[#B68A3D]" />
+          <ItaliaBar className="mx-auto my-3.5 h-[3px] w-[70px]" />
           <p className="text-[13.5px] tracking-wide text-[#6b6a5f]">{subtitle}</p>
         </header>
       )}
