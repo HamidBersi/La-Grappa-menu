@@ -17,7 +17,7 @@ export type PrintPageSlice = {
 const HASH_STORAGE_KEY = "grappa-menu-print-page-hashes";
 
 export function hashPrintSlice(slice: PrintPageSlice): string {
-  if (slice.isCover) return "cover:v2-logo";
+  if (slice.isCover) return "cover:v3-logo";
   return slice.sections
     .map((section) =>
       [
