@@ -104,13 +104,13 @@ export function DigitalMenu({ categories, embedded = false }: DigitalMenuProps) 
 
   return (
     <div className="mx-auto min-h-full w-full min-w-0 max-w-3xl pb-24">
-      <div className="sticky top-0 z-30 min-w-0 border-b border-ink/6 bg-paper/90 backdrop-blur-md">
+      <div className="sticky top-0 z-30 min-w-0 bg-paper/90 backdrop-blur-md">
         <MenuTopNav
           locale={locale}
           onLocaleChange={handleLocaleChange}
           showBack={showBack}
         />
-        <div className="min-w-0 px-4 pb-3 sm:px-6">
+        <div className="min-w-0 border-y border-ink/12 px-4 py-3 sm:px-6">
           <MenuFamilyBar
             familyId={familyId}
             onFamilyChange={selectFamily}

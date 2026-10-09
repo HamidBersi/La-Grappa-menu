@@ -3,7 +3,6 @@
 import { useEffect, useRef, useState } from "react";
 
 import { BrandLogo } from "@/components/brand-logo";
-import { ItaliaBar } from "@/components/italia-bar";
 import {
   LOCALE_LABELS,
   MENU_LOCALES,
@@ -100,19 +99,18 @@ export function MenuTopNav({
             aria-label={ui.backLabel}
             className="shrink-0 rounded-full transition active:scale-95 hover:opacity-90"
           >
-            <BrandLogo size={44} className="size-11 ring-leaf/20" alt="" />
+            <BrandLogo size={58} className="size-[58px]" alt="" />
           </button>
         ) : (
-          <BrandLogo size={44} className="size-11 ring-leaf/20" />
+          <BrandLogo size={58} className="size-[58px]" />
         )}
         <div className="min-w-0">
-          <p className="truncate font-[family-name:var(--font-cormorant)] text-[23px] leading-none font-semibold text-leaf">
+          <p className="truncate font-[family-name:var(--font-cormorant)] text-[28px] leading-none font-semibold text-ink">
             La Grappa
           </p>
-          <p className="mt-1 truncate text-[10px] font-medium tracking-[0.2em] text-wine/70 uppercase">
+          <p className="mt-1.5 truncate text-[11px] font-medium tracking-[0.2em] text-ink uppercase">
             {ui.tagline}
           </p>
-          <ItaliaBar className="mt-1.5 h-[3px] w-11" />
         </div>
       </div>
 
