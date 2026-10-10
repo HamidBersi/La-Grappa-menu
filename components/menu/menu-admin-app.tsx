@@ -552,10 +552,10 @@ export function MenuAdminApp() {
             <BrandLogo size={40} className="size-10" alt="" />
             <div className="min-w-0 leading-tight">
               <p className="truncate font-[family-name:var(--font-cormorant)] text-[22px] tracking-wide">
-                Le Menu
+                La Grappa
               </p>
-              <p className="hidden text-[11px] font-medium tracking-[0.16em] text-white/70 uppercase sm:block">
-                Admin
+              <p className="text-[11px] font-medium tracking-wide text-white/70">
+                espace admin
               </p>
             </div>
           </div>

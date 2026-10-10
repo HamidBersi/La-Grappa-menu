@@ -171,7 +171,7 @@ function WineRow({ item, locale }: { item: MenuItemDto; locale: MenuLocale }) {
         <h3 className="min-w-0 text-[15.5px] leading-snug font-medium break-words text-ink">
           <DishTitle name={translated.name} emoji={item.emoji} />
         </h3>
-        <span className="shrink-0 pt-0.5 text-[15px] font-semibold tabular-nums text-wine">
+        <span className="shrink-0 pt-0.5 text-[15px] font-semibold tabular-nums text-ink">
           {formatEuro(headline)}
         </span>
       </div>
@@ -210,7 +210,7 @@ function DishRow({ item, locale }: { item: MenuItemDto; locale: MenuLocale }) {
             <span className="ml-1.5 font-normal text-ink/45">{volume}</span>
           ) : null}
         </h3>
-        <span className="shrink-0 pt-0.5 text-[15px] font-semibold tabular-nums text-wine">
+        <span className="shrink-0 pt-0.5 text-[15px] font-semibold tabular-nums text-ink">
           {formatEuro(item.price)}
         </span>
       </div>
