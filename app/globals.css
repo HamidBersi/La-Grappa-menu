@@ -5,6 +5,7 @@
   --background: #f7f4ef;
   --foreground: #1c1a17;
   --paper: #f7f4ef;
+  --paper-nav: #f0ece4;
   --ink: #1c1a17;
   --leaf: #009246;
   --wine: #ce2b37;
@@ -15,6 +16,7 @@
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-paper: var(--paper);
+  --color-paper-nav: var(--paper-nav);
   --color-ink: var(--ink);
   --color-wine: var(--wine);
   --color-leaf: var(--leaf);

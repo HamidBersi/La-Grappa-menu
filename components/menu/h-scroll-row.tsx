@@ -65,7 +65,7 @@ export function HScrollRow({
       </div>
       {canScrollLeft ? (
         <div
-          className={`pointer-events-none absolute inset-y-0 left-0 z-10 flex w-11 items-center justify-start bg-gradient-to-r ${fadeFromClass} to-transparent pl-0.5 ${hideOnWrap}`}
+          className={`pointer-events-none absolute inset-y-0 left-0 z-10 hidden w-11 items-center justify-start bg-gradient-to-r ${fadeFromClass} to-transparent pl-0.5 md:flex ${hideOnWrap}`}
         >
           <button
             type="button"
@@ -79,7 +79,7 @@ export function HScrollRow({
       ) : null}
       {canScrollRight ? (
         <div
-          className={`pointer-events-none absolute inset-y-0 right-0 z-10 flex w-11 items-center justify-end bg-gradient-to-l ${fadeFromClass} to-transparent pr-0.5 ${hideOnWrap}`}
+          className={`pointer-events-none absolute inset-y-0 right-0 z-10 hidden w-11 items-center justify-end bg-gradient-to-l ${fadeFromClass} to-transparent pr-0.5 md:flex ${hideOnWrap}`}
         >
           <button
             type="button"

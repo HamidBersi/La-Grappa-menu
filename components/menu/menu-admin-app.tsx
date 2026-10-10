@@ -18,7 +18,18 @@ import {
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { GripVertical, LogOut, Menu, Plus, Printer, QrCode, Trash2, X } from "lucide-react";
+import {
+  Eye,
+  GripVertical,
+  LogOut,
+  Menu,
+  Pencil,
+  Plus,
+  Printer,
+  QrCode,
+  Trash2,
+  X,
+} from "lucide-react";
 import { BrandLogo } from "@/components/brand-logo";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Toaster, toast } from "sonner";
@@ -103,6 +114,7 @@ export function MenuAdminApp() {
   const [saving, setSaving] = useState(false);
   const [qrOpen, setQrOpen] = useState(false);
   const [navOpen, setNavOpen] = useState(false);
+  const navRef = useRef<HTMLDivElement>(null);
   const [menuPublicUrl, setMenuPublicUrl] = useState("/menu");
   const [pendingDelete, setPendingDelete] = useState<MenuItemDto | null>(null);
   const [deleting, setDeleting] = useState(false);
@@ -453,6 +465,27 @@ export function MenuAdminApp() {
     };
   }, [printOpen, categories]);
 
+  useEffect(() => {
+    if (!navOpen) return;
+
+    function onPointerDown(event: MouseEvent) {
+      if (navRef.current && !navRef.current.contains(event.target as Node)) {
+        setNavOpen(false);
+      }
+    }
+
+    function onKeyDown(event: KeyboardEvent) {
+      if (event.key === "Escape") setNavOpen(false);
+    }
+
+    document.addEventListener("pointerdown", onPointerDown);
+    document.addEventListener("keydown", onKeyDown);
+    return () => {
+      document.removeEventListener("pointerdown", onPointerDown);
+      document.removeEventListener("keydown", onKeyDown);
+    };
+  }, [navOpen]);
+
   function togglePrintPage(page: number) {
     setPrintSelection((current) =>
       current.includes(page)
@@ -514,143 +547,157 @@ export function MenuAdminApp() {
   return (
     <div className="menu-admin-root flex min-h-dvh flex-1 flex-col bg-paper text-ink">
       <header className="menu-admin-chrome shrink-0 bg-leaf text-white">
-        <div className="flex items-center justify-between gap-3 px-5 py-3.5">
+        <div className="flex items-center gap-3 px-4 py-3.5 sm:px-5">
           <div className="flex min-w-0 items-center gap-2.5">
-            <BrandLogo size={36} className="size-9 ring-white/35" alt="" />
-            <span className="font-[family-name:var(--font-cormorant)] text-[22px] tracking-wide">
-              Le Menu
-            </span>
-            <span className="hidden text-xs tracking-wide text-white/75 sm:inline">
-              espace admin
-            </span>
+            <BrandLogo size={40} className="size-10" alt="" />
+            <div className="min-w-0 leading-tight">
+              <p className="truncate font-[family-name:var(--font-cormorant)] text-[22px] tracking-wide">
+                Le Menu
+              </p>
+              <p className="hidden text-[11px] font-medium tracking-[0.16em] text-white/70 uppercase sm:block">
+                Admin
+              </p>
+            </div>
           </div>
 
-          <div className="hidden items-center gap-3 lg:flex">
-            <div className="flex rounded-lg bg-black/20 p-1">
+          <div className="ml-auto hidden items-center gap-1.5 md:flex">
+            <div className="flex rounded-full bg-black/20 p-0.5">
               <button
                 type="button"
                 onClick={() => setView("edit")}
-                className={`rounded-md px-3.5 py-2 text-sm transition ${
+                className={`rounded-full px-3 py-1 text-[13px] font-medium transition ${
                   view === "edit"
-                    ? "bg-white font-semibold text-leaf"
-                    : "text-[#FBF8F1] hover:bg-white/10"
-                }`}
-              >
-                Éditer le menu
-              </button>
-              <button
-                type="button"
-                onClick={() => setView("preview")}
-                className={`rounded-md px-3.5 py-2 text-sm transition ${
-                  view === "preview"
-                    ? "bg-white font-semibold text-leaf"
-                    : "text-[#FBF8F1] hover:bg-white/10"
-                }`}
-              >
-                Aperçu / menu digital
-              </button>
-            </div>
-            <button
-              type="button"
-              className="inline-flex items-center gap-1.5 rounded-md border border-white/40 px-3 py-2 text-[13px] text-white transition hover:bg-white/10"
-              onClick={openPrintModal}
-            >
-              <Printer className="size-3.5" />
-              Imprimer
-            </button>
-            <button
-              type="button"
-              className="inline-flex items-center gap-1.5 rounded-md bg-white px-3 py-2 text-[13px] font-semibold text-leaf transition hover:bg-white/90"
-              onClick={() => setQrOpen(true)}
-            >
-              <QrCode className="size-3.5" />
-              QR code
-            </button>
-            <button
-              type="button"
-              className="inline-flex items-center gap-1.5 rounded-md border border-white/35 bg-transparent px-3 py-2 text-[13px] text-white hover:bg-white/10"
-              onClick={logout}
-            >
-              <LogOut className="size-4" />
-              Quitter
-            </button>
-          </div>
-
-          <button
-            type="button"
-            className="flex size-10 items-center justify-center rounded-md hover:bg-white/10 lg:hidden"
-            aria-label={navOpen ? "Fermer le menu" : "Ouvrir le menu"}
-            aria-expanded={navOpen}
-            onClick={() => setNavOpen((open) => !open)}
-          >
-            {navOpen ? <X className="size-5" /> : <Menu className="size-5" />}
-          </button>
-        </div>
-
-        {navOpen ? (
-          <div className="space-y-3 border-t border-white/10 px-4 py-3 lg:hidden">
-            <div className="flex rounded-lg bg-black/20 p-1">
-              <button
-                type="button"
-                onClick={() => {
-                  setView("edit");
-                  setNavOpen(false);
-                }}
-                className={`flex-1 rounded-md px-3 py-2 text-sm transition ${
-                  view === "edit"
-                    ? "bg-white font-semibold text-leaf"
-                    : "text-[#FBF8F1]"
+                    ? "bg-white text-leaf shadow-sm"
+                    : "text-white/85 hover:bg-white/10 hover:text-white"
                 }`}
               >
                 Éditer
               </button>
               <button
                 type="button"
-                onClick={() => {
-                  setView("preview");
-                  setNavOpen(false);
-                }}
-                className={`flex-1 rounded-md px-3 py-2 text-sm transition ${
+                onClick={() => setView("preview")}
+                className={`rounded-full px-3 py-1 text-[13px] font-medium transition ${
                   view === "preview"
-                    ? "bg-white font-semibold text-leaf"
-                    : "text-[#FBF8F1]"
+                    ? "bg-white text-leaf shadow-sm"
+                    : "text-white/85 hover:bg-white/10 hover:text-white"
                 }`}
               >
                 Aperçu
               </button>
             </div>
+
+            <span className="mx-0.5 h-4 w-px bg-white/20" aria-hidden />
+
             <button
               type="button"
-              className="flex w-full items-center justify-center gap-1.5 rounded-md border border-white/40 px-3 py-2.5 text-[13px]"
-              onClick={() => {
-                setNavOpen(false);
-                openPrintModal();
-              }}
+              title="Imprimer"
+              aria-label="Imprimer"
+              className="inline-flex h-8 items-center gap-1.5 rounded-full px-2.5 text-white/90 transition hover:bg-white/15 hover:text-white"
+              onClick={openPrintModal}
             >
               <Printer className="size-3.5" />
-              Imprimer
+              <span className="text-[12px] font-medium">Imprimer</span>
             </button>
             <button
               type="button"
-              className="flex w-full items-center justify-center gap-1.5 rounded-md bg-white px-3 py-2.5 text-[13px] font-semibold text-leaf"
-              onClick={() => {
-                setNavOpen(false);
-                setQrOpen(true);
-              }}
+              title="QR code"
+              aria-label="QR code"
+              className="inline-flex h-8 items-center gap-1.5 rounded-full bg-white px-2.5 text-leaf transition hover:bg-white/90"
+              onClick={() => setQrOpen(true)}
             >
               <QrCode className="size-3.5" />
-              QR code
+              <span className="text-[12px] font-semibold">QR</span>
             </button>
             <button
               type="button"
-              className="flex w-full items-center justify-center gap-1.5 rounded-md border border-white/35 px-3 py-2.5 text-[13px]"
+              title="Quitter"
+              aria-label="Quitter"
+              className="inline-flex h-8 items-center gap-1.5 rounded-full px-2.5 text-white/90 transition hover:bg-white/15 hover:text-white"
               onClick={logout}
             >
-              <LogOut className="size-4" />
-              Quitter
+              <LogOut className="size-3.5" />
+              <span className="text-[12px] font-medium">Quitter</span>
             </button>
           </div>
-        ) : null}
+
+          <div ref={navRef} className="relative ml-auto md:hidden">
+            <button
+              type="button"
+              className="flex size-10 items-center justify-center rounded-full hover:bg-white/15"
+              aria-label={navOpen ? "Fermer le menu" : "Ouvrir le menu"}
+              aria-expanded={navOpen}
+              onClick={() => setNavOpen((open) => !open)}
+            >
+              {navOpen ? <X className="size-5" /> : <Menu className="size-5" />}
+            </button>
+
+            {navOpen ? (
+              <div className="absolute top-full right-0 z-40 mt-2 w-52 overflow-hidden rounded-xl bg-white py-1 text-ink shadow-[0_12px_32px_rgba(31,26,23,0.18)] ring-1 ring-ink/8">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setView("edit");
+                    setNavOpen(false);
+                  }}
+                  className={`flex w-full items-center gap-2.5 px-3 py-2 text-left text-[13px] transition ${
+                    view === "edit"
+                      ? "bg-paper font-medium text-leaf"
+                      : "hover:bg-paper/80"
+                  }`}
+                >
+                  <Pencil className="size-3.5" />
+                  Éditer
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setView("preview");
+                    setNavOpen(false);
+                  }}
+                  className={`flex w-full items-center gap-2.5 px-3 py-2 text-left text-[13px] transition ${
+                    view === "preview"
+                      ? "bg-paper font-medium text-leaf"
+                      : "hover:bg-paper/80"
+                  }`}
+                >
+                  <Eye className="size-3.5" />
+                  Aperçu
+                </button>
+                <div className="my-1 h-px bg-ink/8" />
+                <button
+                  type="button"
+                  onClick={() => {
+                    setNavOpen(false);
+                    openPrintModal();
+                  }}
+                  className="flex w-full items-center gap-2.5 px-3 py-2 text-left text-[13px] hover:bg-paper/80"
+                >
+                  <Printer className="size-3.5" />
+                  Imprimer
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setNavOpen(false);
+                    setQrOpen(true);
+                  }}
+                  className="flex w-full items-center gap-2.5 px-3 py-2 text-left text-[13px] hover:bg-paper/80"
+                >
+                  <QrCode className="size-3.5" />
+                  QR code
+                </button>
+                <button
+                  type="button"
+                  onClick={logout}
+                  className="flex w-full items-center gap-2.5 px-3 py-2 text-left text-[13px] text-wine hover:bg-paper/80"
+                >
+                  <LogOut className="size-3.5" />
+                  Quitter
+                </button>
+              </div>
+            ) : null}
+          </div>
+        </div>
       </header>
 
       {view === "edit" ? (

@@ -11,7 +11,7 @@ export function BrandLogo({
 }: BrandLogoProps) {
   return (
     <img
-      src="/logo-grappa-round.png?v=4"
+      src="/logo-grappa-round.png?v=5"
       alt={alt}
       width={size}
       height={size}

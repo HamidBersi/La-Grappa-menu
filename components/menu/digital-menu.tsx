@@ -110,7 +110,7 @@ export function DigitalMenu({ categories, embedded = false }: DigitalMenuProps) 
           onLocaleChange={handleLocaleChange}
           showBack={showBack}
         />
-        <div className="min-w-0 border-y border-ink/12 px-4 py-3 sm:px-6">
+        <div className="min-w-0 border-y border-ink/12 bg-paper-nav px-4 py-3 sm:px-6">
           <MenuFamilyBar
             familyId={familyId}
             onFamilyChange={selectFamily}
@@ -118,6 +118,7 @@ export function DigitalMenu({ categories, embedded = false }: DigitalMenuProps) 
             onSubCategoryChange={setSubCategoryName}
             categoryNames={categories.map((category) => category.name)}
             locale={locale}
+            fadeFromClass="from-paper-nav"
           />
         </div>
       </div>
