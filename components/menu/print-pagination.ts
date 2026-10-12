@@ -14,6 +14,41 @@ export type PrintPageSlice = {
   sections: PrintPageSection[];
 };
 
+type PageDraft = PrintPageSlice & { used: number };
+
+function mergeSections(target: PrintPageSection[], extra: PrintPageSection[]) {
+  for (const section of extra) {
+    const last = target[target.length - 1];
+    if (last && last.categoryId === section.categoryId) {
+      last.items.push(...section.items);
+    } else {
+      target.push(section);
+    }
+  }
+}
+
+/** Recolle une dernière page trop vide sur la précédente. */
+function absorbSparseTail(pages: PageDraft[], pageHeightPx: number) {
+  const minFill = pageHeightPx * 0.52;
+  const mergeSlack = pageHeightPx * 1.08;
+  const forceMerge = pageHeightPx * 0.34;
+
+  while (pages.length >= 2) {
+    const last = pages[pages.length - 1];
+    const prev = pages[pages.length - 2];
+    if (last.isCover || prev.isCover) break;
+    if (last.used >= minFill) break;
+    if (prev.used + last.used > mergeSlack && last.used >= forceMerge) break;
+    mergeSections(prev.sections, last.sections);
+    prev.used += last.used;
+    pages.pop();
+  }
+
+  pages.forEach((page, index) => {
+    page.page = index + 1;
+  });
+}
+
 const HASH_STORAGE_KEY = "grappa-menu-print-page-hashes";
 
 export function hashPrintSlice(slice: PrintPageSlice): string {
@@ -153,9 +188,9 @@ export function slicePrintPagesFromDom(
     }
   }
 
-  const pages: PrintPageSlice[] = [];
+  const pages: PageDraft[] = [];
   if (root.querySelector(".menu-cover")) {
-    pages.push({ page: 1, isCover: true, sections: [] });
+    pages.push({ page: 1, isCover: true, sections: [], used: pageHeightPx });
   }
 
   let pageNum = pages.length + 1;
@@ -164,7 +199,7 @@ export function slicePrintPagesFromDom(
 
   function flush() {
     if (sections.length === 0) return;
-    pages.push({ page: pageNum, isCover: false, sections });
+    pages.push({ page: pageNum, isCover: false, sections, used });
     pageNum += 1;
     sections = [];
     used = 0;
@@ -249,5 +284,10 @@ export function slicePrintPagesFromDom(
   }
 
   flush();
-  return pages;
+  absorbSparseTail(pages, pageHeightPx);
+  return pages.map(({ page, isCover, sections }) => ({
+    page,
+    isCover,
+    sections,
+  }));
 }

@@ -58,6 +58,7 @@ select {
   height: 4.5rem;
   margin: 0 auto 0.85rem;
   border-radius: 999px;
+  border: 1px solid #d0c9bc;
   object-fit: cover;
   -webkit-print-color-adjust: exact;
   print-color-adjust: exact;
@@ -69,15 +70,6 @@ select {
   font-weight: 600;
   letter-spacing: 0.04em;
   color: #009246;
-}
-
-.menu-cover-tag {
-  margin-top: 0.35rem;
-  font-size: 0.72rem;
-  font-weight: 600;
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
-  color: #8a8578;
 }
 
 .menu-cover-frame {
@@ -116,7 +108,7 @@ select {
 
 .menu-stack .menu-cat,
 .menu-sheet > .menu-cat {
-  margin-bottom: 1.15rem;
+  margin-bottom: 0.85rem;
 }
 
 .menu-print-pages {
@@ -246,7 +238,7 @@ select {
   }
 
   .menu-cat-title {
-    font-size: 28px !important;
+    font-size: 33px !important;
     font-weight: 700 !important;
     font-style: italic !important;
     color: #009246 !important;
@@ -255,6 +247,7 @@ select {
   .menu-cover-mark {
     width: 22mm !important;
     height: 22mm !important;
+    border: 1px solid #d0c9bc !important;
     visibility: visible !important;
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;

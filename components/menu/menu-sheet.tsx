@@ -122,7 +122,7 @@ function CategoryBlock({
   return (
     <section className="menu-cat" data-category-id={category.id}>
       {continuation ? null : (
-        <h2 className="menu-cat-title mb-3 flex items-center gap-3 font-[family-name:var(--font-cormorant)] text-[28px] font-semibold leading-none text-leaf">
+        <h2 className="menu-cat-title mb-3 flex items-center gap-3 font-[family-name:var(--font-cormorant)] text-[33px] font-bold italic leading-none text-leaf">
           <span>{category.name}</span>
           <span className="h-px flex-1 bg-[#D9CFB8]" aria-hidden />
         </h2>
@@ -147,7 +147,6 @@ function MenuCover() {
       <div className="menu-cover-brand">
         <BrandLogo size={72} className="menu-cover-mark" alt="" />
         <p className="menu-cover-name">La Grappa</p>
-        <p className="menu-cover-tag">Restaurant italien</p>
       </div>
 
       <div className="menu-cover-frame">

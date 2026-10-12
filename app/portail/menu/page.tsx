@@ -13,7 +13,7 @@ export default function MenuPortalPage() {
           href="/menu?from=app"
           emoji="👁️"
           title="Voir le menu"
-          description="Aperçu public — QR, tablette, clients."
+          description="Aperçu public"
         />
         <PortalCard
           href="/admin/menu"

@@ -718,21 +718,21 @@ export function MenuAdminApp() {
             </div>
           </div>
 
-          <section className="overflow-y-auto px-4 py-6 sm:px-6 sm:py-8">
+          <section className="overflow-y-auto px-3 py-3 sm:px-6 sm:py-5">
             {loading ? (
               <p className="text-sm text-[#6b6a5f]">Chargement…</p>
             ) : (
               <div className="mx-auto w-full min-w-0 max-w-2xl">
-                <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
-                  <h2 className="font-[family-name:var(--font-cormorant)] text-[28px] font-semibold text-leaf">
+                <div className="mb-2.5 flex flex-wrap items-center justify-between gap-2 sm:mb-3">
+                  <h2 className="font-[family-name:var(--font-cormorant)] text-[22px] font-semibold text-leaf sm:text-[24px]">
                     {selectedCategory?.name ?? "Aucune catégorie"}
                   </h2>
                   <button
                     type="button"
                     onClick={openCreate}
-                    className="inline-flex items-center gap-1.5 rounded-md bg-leaf px-4 py-2.5 text-[13.5px] font-semibold text-white transition hover:bg-[#007a3b]"
+                    className="inline-flex items-center gap-1.5 rounded-md bg-leaf px-3 py-2 text-[13px] font-semibold text-white transition hover:bg-[#007a3b]"
                   >
-                    <Plus className="size-4" />
+                    <Plus className="size-3.5" />
                     Ajouter un plat
                   </button>
                 </div>
@@ -751,7 +751,7 @@ export function MenuAdminApp() {
                       items={selectedCategory.items.map((item) => item.id)}
                       strategy={verticalListSortingStrategy}
                     >
-                      <div className="space-y-3">
+                      <div className="space-y-1.5 sm:space-y-2">
                         {selectedCategory.items.map((item) => (
                           <SortableMenuItem
                             key={item.id}
@@ -1181,62 +1181,80 @@ function SortableMenuItem({
     <article
       ref={setNodeRef}
       style={style}
-      className="flex min-w-0 flex-col gap-1.5 rounded-[10px] border border-[#D9CFB8] bg-white px-4 py-3.5"
+      className="flex min-w-0 items-start gap-1.5 rounded-lg border border-[#D9CFB8] bg-white px-2 py-1.5 sm:gap-2 sm:px-2.5 sm:py-2"
     >
-      <div className="flex min-w-0 items-start gap-2.5">
-        <button
-          type="button"
-          className="mt-0.5 shrink-0 cursor-grab touch-none rounded-md border border-[#D9CFB8] bg-white p-1.5 text-[#8a8578] hover:border-leaf/30 hover:text-leaf active:cursor-grabbing disabled:cursor-not-allowed disabled:opacity-50"
-          aria-label="Déplacer le plat"
-          disabled={disabled}
-          {...attributes}
-          {...listeners}
-        >
-          <GripVertical className="size-4" />
-        </button>
-        <div className="flex min-w-0 flex-1 items-start justify-between gap-2">
-          <h3 className="min-w-0 flex-1 break-words font-[family-name:var(--font-cormorant)] text-[19px] font-semibold leading-snug">
+      <button
+        type="button"
+        className="mt-0.5 flex size-8 shrink-0 cursor-grab touch-none items-center justify-center rounded-md border border-[#D9CFB8] bg-white text-[#8a8578] hover:border-leaf/30 hover:text-leaf active:cursor-grabbing disabled:cursor-not-allowed disabled:opacity-50 sm:size-auto sm:p-1"
+        aria-label="Déplacer le plat"
+        disabled={disabled}
+        {...attributes}
+        {...listeners}
+      >
+        <GripVertical className="size-3.5" />
+      </button>
+      <div className="min-w-0 flex-1">
+        <div className="flex min-w-0 items-start gap-1.5">
+          <h3 className="min-w-0 flex-1 break-words font-[family-name:var(--font-cormorant)] text-[16px] font-semibold leading-snug sm:text-[17px]">
             <DishTitle name={item.name} emoji={item.emoji} />
           </h3>
-          <span className="shrink-0 font-semibold text-leaf">
+          <span className="shrink-0 pt-0.5 text-[13px] font-semibold text-leaf sm:text-[13.5px]">
             {item.price} €
           </span>
+          <div className="flex shrink-0 items-center gap-0.5 sm:hidden">
+            <button
+              type="button"
+              className="flex size-8 items-center justify-center rounded-md text-leaf hover:bg-[#FBF8F1]"
+              onClick={onEdit}
+              aria-label="Modifier"
+            >
+              <Pencil className="size-3.5" />
+            </button>
+            <button
+              type="button"
+              className="flex size-8 items-center justify-center rounded-md text-[#6E2A2A] hover:bg-[#F8EEEE]"
+              onClick={onDelete}
+              aria-label="Supprimer"
+            >
+              <Trash2 className="size-3.5" />
+            </button>
+          </div>
         </div>
-      </div>
-      {item.priceVerre ||
-      item.priceQuart ||
-      item.priceDemi ||
-      item.priceBouteille ? (
-        <p className="pl-[42px] text-[12px] text-[#6b6a5f]">
-          {[
-            item.priceQuart ? `Quart ${item.priceQuart} €` : null,
-            item.priceDemi ? `Demi ${item.priceDemi} €` : null,
-            item.priceBouteille ? `Btl ${item.priceBouteille} €` : null,
-          ]
-            .filter(Boolean)
-            .join(" · ")}
-        </p>
-      ) : null}
-      {item.description?.trim() ? (
-        <p className="w-full break-words pl-[42px] text-sm leading-snug text-[#6b6a5f]">
-          {item.description}
-        </p>
-      ) : null}
-      <div className="mt-2 flex justify-end gap-2 border-t border-[#EFE8DC] pt-2.5">
-        <button
-          type="button"
-          className="rounded-md border border-[#D9CFB8] bg-[#FBF8F1] px-3 py-1.5 text-[13px] font-semibold text-leaf transition hover:border-leaf/35 hover:bg-white"
-          onClick={onEdit}
-        >
-          Modifier
-        </button>
-        <button
-          type="button"
-          className="rounded-md border border-[#E0B4B0] bg-[#F8EEEE] px-3 py-1.5 text-[13px] font-semibold text-[#6E2A2A] transition hover:bg-[#F3E0DE]"
-          onClick={onDelete}
-        >
-          Supprimer
-        </button>
+        {item.priceVerre ||
+        item.priceQuart ||
+        item.priceDemi ||
+        item.priceBouteille ? (
+          <p className="mt-0.5 text-[11px] text-[#6b6a5f] sm:text-[11.5px]">
+            {[
+              item.priceQuart ? `Quart ${item.priceQuart} €` : null,
+              item.priceDemi ? `Demi ${item.priceDemi} €` : null,
+              item.priceBouteille ? `Btl ${item.priceBouteille} €` : null,
+            ]
+              .filter(Boolean)
+              .join(" · ")}
+          </p>
+        ) : null}
+        {item.description?.trim() ? (
+          <p className="mt-0.5 line-clamp-1 w-full break-words text-[12px] leading-snug text-[#6b6a5f] sm:line-clamp-2 sm:text-[12.5px]">
+            {item.description}
+          </p>
+        ) : null}
+        <div className="mt-1.5 hidden justify-end gap-1.5 sm:flex">
+          <button
+            type="button"
+            className="rounded-md border border-[#D9CFB8] bg-[#FBF8F1] px-2 py-1 text-[12px] font-semibold text-leaf transition hover:border-leaf/35 hover:bg-white"
+            onClick={onEdit}
+          >
+            Modifier
+          </button>
+          <button
+            type="button"
+            className="rounded-md border border-[#E0B4B0] bg-[#F8EEEE] px-2 py-1 text-[12px] font-semibold text-[#6E2A2A] transition hover:bg-[#F3E0DE]"
+            onClick={onDelete}
+          >
+            Supprimer
+          </button>
+        </div>
       </div>
     </article>
   );
