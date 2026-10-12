@@ -840,6 +840,16 @@ export function MenuAdminApp() {
                     />
                   </div>
                 </DishDeletedSearch>
+                {isCreating && !restoringId ? (
+                  <p className="mt-1 text-[11px] leading-snug text-[#8a8578]">
+                    Tapez quelques lettres pour retrouver un plat déjà retiré.
+                  </p>
+                ) : null}
+                {restoringId ? (
+                  <p className="mt-1 text-[11px] font-medium text-leaf">
+                    Plat retiré — il sera rétabli à l’enregistrement.
+                  </p>
+                ) : null}
               </label>
 
               <label className="block">

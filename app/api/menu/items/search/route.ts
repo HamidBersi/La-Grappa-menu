@@ -4,7 +4,7 @@ import { requireOwner } from "@/lib/require-owner";
 import {
   SEARCH_MAX_RESULTS,
   SEARCH_MIN_QUERY_LENGTH,
-  matchesWordPrefix,
+  matchesDishName,
 } from "@/lib/dish-search";
 
 export async function GET(request: Request) {
@@ -48,7 +48,7 @@ export async function GET(request: Request) {
   });
 
   const results = items
-    .filter((item) => matchesWordPrefix(item.name, query))
+    .filter((item) => matchesDishName(item.name, query))
     .slice(0, SEARCH_MAX_RESULTS)
     .map(({ category: itemCategory, ...item }) => ({
       ...item,
