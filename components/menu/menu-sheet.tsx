@@ -18,7 +18,6 @@ type MenuSheetProps = {
   categoryFilter?: "all" | string | string[];
   printSlices?: PrintPageSlice[] | null;
   measure?: boolean;
-  restaurantName?: string;
   subtitle?: string;
 };
 
@@ -227,7 +226,6 @@ export function MenuSheet({
   categoryFilter = "all",
   printSlices = null,
   measure = false,
-  restaurantName = "La Grappa",
   subtitle = "Cuisine italienne",
 }: MenuSheetProps) {
   const visibleCategories = categories
@@ -296,9 +294,6 @@ export function MenuSheet({
     >
       {measure ? null : (
         <header className="menu-sheet-header mb-9 text-center">
-          <h1 className="font-[family-name:var(--font-cormorant)] text-[42px] leading-none font-semibold text-leaf sm:text-[44px]">
-            {restaurantName}
-          </h1>
           <ItaliaBar className="mx-auto my-3.5 h-[3px] w-[70px]" />
           <p className="text-[13.5px] tracking-wide text-[#6b6a5f]">{subtitle}</p>
         </header>
