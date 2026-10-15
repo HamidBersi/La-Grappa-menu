@@ -49,8 +49,8 @@ export function PortalCard({
 }
 
 type PortalShellProps = {
-  eyebrow: string;
-  title: string;
+  eyebrow?: string;
+  title?: string;
   subtitle?: string;
   children: ReactNode;
   backHref?: string;
@@ -65,6 +65,7 @@ export function PortalShell({
   backHref,
   backLabel = "Retour",
 }: PortalShellProps) {
+  const hasHeading = Boolean(eyebrow || title || subtitle);
   return (
     <main className="relative min-h-screen overflow-hidden bg-[#F7F0E4] text-ink">
       <div
@@ -79,16 +80,20 @@ export function PortalShell({
       <div className="relative z-10 mx-auto flex min-h-screen max-w-2xl flex-col px-6 py-10">
         <div className="flex flex-1 flex-col items-center justify-center">
           <header className="animate-in fade-in slide-in-from-bottom-4 fill-mode-both text-center duration-700">
-            <div className="mb-6 flex justify-center">
-              <BrandLogo size={120} className="size-[120px] ring-leaf/15" />
+            <div className={hasHeading ? "mb-6 flex justify-center" : "mb-2 flex justify-center"}>
+              <BrandLogo size={120} className="size-[120px] bg-white shadow-[0_10px_28px_rgba(27,30,25,0.12)]" />
             </div>
-            <p className="font-[family-name:var(--font-cormorant)] text-[clamp(2.75rem,9vw,4.25rem)] font-light leading-none tracking-[0.16em] text-leaf">
-              {eyebrow}
-            </p>
-            <ItaliaBar className="mx-auto mt-4 h-[2px] w-28" />
-            <p className="mt-5 font-[family-name:var(--font-cormorant)] text-xl font-semibold tracking-[0.22em] text-wine uppercase">
-              {title}
-            </p>
+            {eyebrow ? (
+              <p className="font-[family-name:var(--font-cormorant)] text-[clamp(2.75rem,9vw,4.25rem)] font-light leading-none tracking-[0.16em] text-leaf">
+                {eyebrow}
+              </p>
+            ) : null}
+            {hasHeading ? <ItaliaBar className="mx-auto mt-4 h-[2px] w-28" /> : null}
+            {title ? (
+              <p className="mt-5 font-[family-name:var(--font-cormorant)] text-xl font-semibold tracking-[0.22em] text-wine uppercase">
+                {title}
+              </p>
+            ) : null}
             {subtitle ? (
               <p className="mt-3 text-sm tracking-wide text-[#6F6A5C]">{subtitle}</p>
             ) : null}

@@ -1,5 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 
+import { DESSERT_CARD_CATEGORIES } from "./dessert-card-data";
+
 const prisma = new PrismaClient();
 
 type SeedItem = {
@@ -525,6 +527,7 @@ const CATEGORIES: SeedCategory[] = [
       },
     ],
   },
+  ...DESSERT_CARD_CATEGORIES,
 ];
 
 async function main() {

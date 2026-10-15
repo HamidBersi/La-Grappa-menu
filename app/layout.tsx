@@ -1,5 +1,10 @@
 import type { Metadata } from "next";
-import { Cormorant_Garamond, Geist_Mono, Plus_Jakarta_Sans } from "next/font/google";
+import {
+  Allura,
+  Cormorant_Garamond,
+  Geist_Mono,
+  Plus_Jakarta_Sans,
+} from "next/font/google";
 import "./globals.css";
 
 const plusJakarta = Plus_Jakarta_Sans({
@@ -19,16 +24,22 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+const allura = Allura({
+  variable: "--font-allura",
+  subsets: ["latin"],
+  weight: "400",
+});
+
 export const metadata: Metadata = {
   title: "La Grappa",
   description: "Carte digitale du restaurant La Grappa",
   icons: {
     icon: [
-      { url: "/favicon.ico?v=5", sizes: "32x32", type: "image/x-icon" },
-      { url: "/icons/favicon-32.png?v=5", sizes: "32x32", type: "image/png" },
-      { url: "/icons/favicon-192.png?v=5", sizes: "192x192", type: "image/png" },
+      { url: "/favicon.ico?v=9", sizes: "32x32", type: "image/x-icon" },
+      { url: "/icons/favicon-32.png?v=9", sizes: "32x32", type: "image/png" },
+      { url: "/icons/favicon-192.png?v=9", sizes: "192x192", type: "image/png" },
     ],
-    apple: [{ url: "/icons/apple-touch-icon.png?v=5", sizes: "180x180" }],
+    apple: [{ url: "/icons/apple-touch-icon.png?v=9", sizes: "180x180" }],
   },
   appleWebApp: {
     capable: true,
@@ -41,7 +52,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="fr"
-      className={`${plusJakarta.variable} ${cormorant.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${plusJakarta.variable} ${cormorant.variable} ${allura.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className={`${plusJakarta.className} flex min-h-full min-w-0 flex-col font-sans`}>
         {children}

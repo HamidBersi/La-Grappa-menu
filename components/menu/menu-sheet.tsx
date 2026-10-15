@@ -1,14 +1,16 @@
-import { BrandLogo } from "@/components/brand-logo";
 import { ItaliaBar } from "@/components/italia-bar";
 import type { MenuCategoryDto, MenuItemDto } from "@/components/menu/menu-types";
 import { isListedOnMenu } from "@/components/menu/menu-types";
 import { DishTitle } from "@/components/menu/dish-title";
+import {
+  PRINT_NOTES,
+  isPrintFooterDish,
+} from "@/components/menu/print-notes";
 import type { PrintPageSlice } from "@/components/menu/print-pagination";
 import {
   formatEuro,
   hasWineTiers,
   splitWineName,
-  WINE_TIER_COLUMNS,
 } from "@/components/menu/wine-prices";
 
 type MenuSheetProps = {
@@ -20,13 +22,38 @@ type MenuSheetProps = {
   subtitle?: string;
 };
 
-const COVER_PARAGRAPHS = [
-  "La Gastronomie est l’art d’utiliser la nourriture pour créer du bonheur",
-  "Tous nos plats sont cuisinés maison et sont préparés sur commande à la minute..",
-  "Nous avons à coeur de préparer l’ensemble de nos entrées, plats et desserts à base de produits frais, de saison et si possible fournis par nos producteurs locaux.",
-  "Toute l’équipe de votre restaurant s’active en salle afin de régaler vos papilles alors prenez votre temps… L’attente, c’est la permission gratuite de profiter de l’instant présent.",
-  "Un tableau d’allergènes est également disponible sur demande auprès de notre personnel.",
+const PRINT_TITLES: Record<string, string> = {
+  "Sans alcool": "Sans Alcool",
+  "Pâtes fraîches": "Pâtes Fraîches",
+  "Vins blancs": "Blancs",
+  "Vins rosés": "Rosés",
+  "Vins rouges": "Rouges",
+  "Sélection cave": "Selection Cave",
+};
+
+const PRINT_WINE_COLUMNS = [
+  { key: "priceVerre" as const, label: "verre", volume: "12 cl" },
+  { key: "priceQuart" as const, label: "quart", volume: "25 cl" },
+  { key: "priceDemi" as const, label: "demi", volume: "50 cl" },
+  { key: "priceBouteille" as const, label: "bouteille", volume: "75 cl" },
 ];
+
+const VOLUME_PATTERN = /^\d+(?:[.,]\d+)?\s*cl$/i;
+
+function printCategoryTitle(name: string): string {
+  return PRINT_TITLES[name] ?? name;
+}
+
+function volumeFromDescription(description: string | null | undefined): string | null {
+  const trimmed = description?.trim() ?? "";
+  if (!trimmed) return null;
+  return VOLUME_PATTERN.test(trimmed) ? trimmed.replace(/\s+/g, " ") : null;
+}
+
+function formatPrintPrice(price: string | null | undefined): string {
+  const formatted = formatEuro(price);
+  return formatted || "-";
+}
 
 function categoryMatchesFilter(
   categoryId: string,
@@ -39,12 +66,22 @@ function categoryMatchesFilter(
 
 function WineTable({ items }: { items: MenuItemDto[] }) {
   return (
-    <table className="wine-table w-full border-collapse text-[13.5px]">
+    <table className="wine-table w-full table-fixed border-collapse">
+      <colgroup>
+        <col />
+        {PRINT_WINE_COLUMNS.map((column) => (
+          <col key={column.key} className="w-[15%]" />
+        ))}
+      </colgroup>
       <thead>
-        <tr className="text-[11px] tracking-wide text-[#8a8578] uppercase">
-          <th className="pb-1.5 pr-2 text-left font-medium">Vin</th>
-          {WINE_TIER_COLUMNS.map((column) => (
-            <th key={column.key} className="w-[4.8rem] pb-1.5 pr-2 text-left font-medium">
+        <tr>
+          <th className="pb-1.5 pr-2 text-left font-normal" />
+          {PRINT_WINE_COLUMNS.map((column) => (
+            <th
+              key={column.key}
+              className="wine-col-head pb-1.5 pl-1 text-right font-normal leading-tight"
+            >
+              <span className="wine-col-vol">{column.volume}</span>
               {column.label}
             </th>
           ))}
@@ -52,28 +89,23 @@ function WineTable({ items }: { items: MenuItemDto[] }) {
       </thead>
       <tbody>
         {items.map((item) => {
-          const { title, style } = splitWineName(item.name);
+          const { title } = splitWineName(item.name);
           return (
-            <tr key={item.id} data-item-id={item.id} className="wine-row border-t border-[#E8E1D4]">
-              <td className="py-1.5 pr-3">
-                <span className="font-[family-name:var(--font-cormorant)] text-[18px] font-semibold text-[#1B1E19]">
+            <tr key={item.id} data-item-id={item.id} className="wine-row">
+              <td className="pr-2 align-top">
+                <span className="wine-name">
                   <DishTitle name={title} emoji={item.emoji} />
                 </span>
-                {style ? (
-                  <span className="ml-1.5 text-[11px] text-[#8a8578]">{style}</span>
-                ) : null}
                 {item.description?.trim() ? (
-                  <p className="mt-0.5 text-[12px] italic text-[#6b6a5f]">
-                    {item.description}
-                  </p>
+                  <p className="menu-dish-desc">{item.description}</p>
                 ) : null}
               </td>
-              {WINE_TIER_COLUMNS.map((column) => (
+              {PRINT_WINE_COLUMNS.map((column) => (
                 <td
                   key={column.key}
-                  className="py-1.5 pr-2 text-left font-semibold tabular-nums text-black"
+                  className="whitespace-nowrap pl-1 text-right align-top font-semibold tabular-nums text-black"
                 >
-                  {item[column.key] ? formatEuro(item[column.key]) : "—"}
+                  {item[column.key] ? formatPrintPrice(item[column.key]) : "-"}
                 </td>
               ))}
             </tr>
@@ -85,75 +117,109 @@ function WineTable({ items }: { items: MenuItemDto[] }) {
 }
 
 function DishBlock({ item }: { item: MenuItemDto }) {
+  const volume = volumeFromDescription(item.description);
+  const extraDescription = volume ? null : item.description?.trim() || null;
+  const descInParens =
+    extraDescription && !extraDescription.startsWith("(")
+      ? `(${extraDescription})`
+      : extraDescription;
+
   return (
     <article className="menu-dish" data-item-id={item.id}>
       <div className="flex items-baseline gap-2">
-        <span className="min-w-0 font-[family-name:var(--font-cormorant)] text-[18px] leading-tight font-semibold text-[#1B1E19]">
+        <span className="menu-dish-name min-w-0">
           <DishTitle name={item.name} emoji={item.emoji} />
         </span>
         <span
-          className="mb-0.5 min-w-[1rem] flex-1 border-b border-dotted border-[#b9b19b]"
+          className="mb-0.5 min-w-[1rem] flex-1 border-b border-dotted border-[#b0b0b0]"
           aria-hidden
         />
-        <span className="shrink-0 text-[15px] font-semibold text-black">
-          {formatEuro(item.price)}
-        </span>
+        {volume ? <span className="menu-dish-volume shrink-0">{volume}</span> : null}
+        <span className="menu-dish-price shrink-0">{formatPrintPrice(item.price)}</span>
       </div>
-      {item.description?.trim() ? (
-        <p className="mt-0.5 max-w-[95%] text-[13px] italic leading-snug text-[#6b6a5f]">
-          {item.description}
-        </p>
-      ) : null}
+      {descInParens ? <p className="menu-dish-desc">{descInParens}</p> : null}
     </article>
   );
 }
 
-function CategoryBlock({
-  category,
-  continuation = false,
-}: {
-  category: MenuCategoryDto;
-  continuation?: boolean;
-}) {
-  const wineItems = category.items.filter((item) => hasWineTiers(item));
-  const otherItems = category.items.filter((item) => !hasWineTiers(item));
+function sectionsToBlocks(sections: PrintPageSlice["sections"]) {
+  const blocks: PrintPageSlice["sections"][] = [];
+  for (let index = 0; index < sections.length; index += 1) {
+    const current = sections[index];
+    const next = sections[index + 1];
+    if (
+      current.categoryName === "Cafés, Infusions" &&
+      next?.categoryName === "Digestifs"
+    ) {
+      blocks.push([current, next]);
+      index += 1;
+    } else {
+      blocks.push([current]);
+    }
+  }
+  return blocks;
+}
+
+function splitSupplement(text: string): { label: string; price: string | null } {
+  const parts = text.split(/\s+·\s+/);
+  if (parts.length >= 2) {
+    return {
+      label: parts.slice(0, -1).join(" · "),
+      price: parts[parts.length - 1] ?? null,
+    };
+  }
+  return { label: text, price: null };
+}
+
+function PrintNoteBlock({ categoryName }: { categoryName: string }) {
+  const note = PRINT_NOTES[categoryName];
+  if (!note) return null;
+  return (
+    <aside className="menu-print-note">
+      {note.lines.map((line) => {
+        if (line.kind === "supplement") {
+          const { label, price } = splitSupplement(line.text);
+          return (
+            <p key={line.text} className="menu-print-note-plus">
+              <span>{label}</span>
+              {price ? (
+                <span className="menu-print-note-price">{price}</span>
+              ) : null}
+            </p>
+          );
+        }
+        return (
+          <p key={line.text} className="menu-print-note-text">
+            {line.text}
+          </p>
+        );
+      })}
+    </aside>
+  );
+}
+
+function CategoryBlock({ category }: { category: MenuCategoryDto }) {
+  const listedItems = PRINT_NOTES[category.name]
+    ? category.items.filter((item) => !isPrintFooterDish(item.name))
+    : category.items;
+  const wineItems = listedItems.filter((item) => hasWineTiers(item));
+  const otherItems = listedItems.filter((item) => !hasWineTiers(item));
   const asWineTable = wineItems.length > 0 && otherItems.length === 0;
 
   return (
     <section className="menu-cat" data-category-id={category.id}>
-      {continuation ? null : (
-        <h2 className="menu-cat-title mb-3 flex items-center gap-3 font-[family-name:var(--font-cormorant)] text-[33px] font-bold italic leading-none text-leaf">
-          <span>{category.name}</span>
-          <span className="h-px flex-1 bg-[#D9CFB8]" aria-hidden />
-        </h2>
-      )}
+      <h2 className="menu-cat-title">{printCategoryTitle(category.name)}</h2>
 
       {asWineTable ? (
         <WineTable items={wineItems} />
       ) : (
-        <div className="space-y-1.5 print:space-y-1.5">
-          {category.items.map((item) => (
+        <div className="menu-dish-list">
+          {listedItems.map((item) => (
             <DishBlock key={item.id} item={item} />
           ))}
         </div>
       )}
-    </section>
-  );
-}
-
-function MenuCover() {
-  return (
-    <section className="menu-cover">
-      <div className="menu-cover-brand">
-        <BrandLogo size={72} className="menu-cover-mark" alt="" />
-        <p className="menu-cover-name">La Grappa</p>
-      </div>
-
-      <div className="menu-cover-frame">
-        {COVER_PARAGRAPHS.map((paragraph) => (
-          <p key={paragraph}>{paragraph}</p>
-        ))}
-      </div>
+      <PrintNoteBlock categoryName={category.name} />
     </section>
   );
 }
@@ -166,7 +232,6 @@ export function MenuSheet({
   restaurantName = "La Grappa",
   subtitle = "Cuisine italienne",
 }: MenuSheetProps) {
-  const showCover = categoryFilter === "all";
   const visibleCategories = categories
     .filter((category) => categoryMatchesFilter(category.id, categoryFilter))
     .map((category) => ({
@@ -179,15 +244,36 @@ export function MenuSheet({
     return (
       <div className="menu-sheet menu-print-pages mx-auto w-full px-4 py-6 sm:px-6 print:max-w-none print:p-0">
         {printSlices.map((slice) => (
-          <section key={slice.page} className="menu-print-page">
-            {slice.isCover ? (
-              <MenuCover />
-            ) : (
-              <div className="menu-stack">
-                {slice.sections.map((section) => (
+          <section
+            key={slice.page}
+            className={`menu-print-page${slice.tight ? " menu-print-page--tight" : ""}`}
+          >
+            <div className="menu-stack">
+              {sectionsToBlocks(slice.sections).map((block) => {
+                if (block.length === 2) {
+                  return (
+                    <div
+                      key={`${slice.page}-pair`}
+                      className="menu-print-pair"
+                    >
+                      {block.map((section) => (
+                        <CategoryBlock
+                          key={`${slice.page}-${section.categoryId}`}
+                          category={{
+                            id: section.categoryId,
+                            name: section.categoryName,
+                            position: 0,
+                            items: section.items,
+                          }}
+                        />
+                      ))}
+                    </div>
+                  );
+                }
+                const section = block[0];
+                return (
                   <CategoryBlock
-                    key={`${slice.page}-${section.categoryId}-${section.continuation ? "c" : "s"}`}
-                    continuation={section.continuation}
+                    key={`${slice.page}-${section.categoryId}`}
                     category={{
                       id: section.categoryId,
                       name: section.categoryName,
@@ -195,9 +281,9 @@ export function MenuSheet({
                       items: section.items,
                     }}
                   />
-                ))}
-              </div>
-            )}
+                );
+              })}
+            </div>
           </section>
         ))}
       </div>
@@ -210,9 +296,7 @@ export function MenuSheet({
         measure ? " menu-sheet--measure" : ""
       }`}
     >
-      {showCover ? (
-        <MenuCover />
-      ) : (
+      {measure ? null : (
         <header className="menu-sheet-header mb-9 text-center">
           <h1 className="font-[family-name:var(--font-cormorant)] text-[42px] leading-none font-semibold text-leaf sm:text-[44px]">
             {restaurantName}

@@ -2,12 +2,7 @@ import { PortalCard, PortalShell } from "@/components/portal-shell";
 
 export default function MenuPortalPage() {
   return (
-    <PortalShell
-      eyebrow="Menu"
-      title="Que voulez-vous faire ?"
-      backHref="/"
-      backLabel="← Accueil"
-    >
+    <PortalShell backHref="/" backLabel="← Accueil">
       <nav className="mt-12 grid w-full gap-4" aria-label="Choix menu">
         <PortalCard
           href="/menu?from=app"

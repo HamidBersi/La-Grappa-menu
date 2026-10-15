@@ -2,12 +2,8 @@ import { PortalCard, PortalShell } from "@/components/portal-shell";
 
 export default function Home() {
   return (
-    <PortalShell
-      eyebrow="La Grappa"
-      title="Restaurant Management"
-      subtitle="Carte digitale"
-    >
-      <nav className="mt-12 grid w-full gap-4" aria-label="Navigation principale">
+    <PortalShell>
+      <nav className="mt-10 grid w-full gap-4" aria-label="Navigation principale">
         <PortalCard
           href="/portail/menu"
           emoji="🍽️"

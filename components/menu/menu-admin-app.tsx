@@ -963,8 +963,8 @@ export function MenuAdminApp() {
       {printOpen ? (
         <div className="menu-admin-chrome fixed inset-0 z-50 flex items-center justify-center bg-[#1B1E19]/55 p-5">
           <div className="pointer-events-none fixed top-0 -left-[240vw] -z-10">
-            <div ref={pageHeightRef} className="h-[269mm] w-[182mm]" />
-            <div ref={measureRef} className="w-[182mm]">
+            <div ref={pageHeightRef} className="h-[265mm] w-[174mm]" />
+            <div ref={measureRef} className="w-[174mm]">
               <MenuSheet categories={categories} measure />
             </div>
           </div>

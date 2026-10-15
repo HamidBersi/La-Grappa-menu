@@ -69,14 +69,19 @@ export const MENU_FAMILIES: MenuFamily[] = [
   {
     id: "dolci",
     label: "Desserts",
-    categoryNames: ["Desserts"],
+    categoryNames: ["Nos Desserts"],
+    chipLabelByName: { "Nos Desserts": "Desserts" },
     countNoun: "desserts",
   },
   {
     id: "dopo",
     label: "Cafés & digestifs",
     navLabel: "Cafés",
-    categoryNames: ["Boissons chaudes", "Les digestifs"],
+    categoryNames: ["Cafés, Infusions", "Digestifs"],
+    chipLabelByName: {
+      "Cafés, Infusions": "Cafés",
+      Digestifs: "Digestifs",
+    },
     countNoun: "boissons",
   },
 ];

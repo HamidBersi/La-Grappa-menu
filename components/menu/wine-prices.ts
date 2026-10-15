@@ -1,10 +1,10 @@
 import type { MenuItemDto } from "@/components/menu/menu-types";
 
 export const WINE_TIER_COLUMNS = [
-  { key: "priceVerre", label: "Verre" },
-  { key: "priceQuart", label: "Quart" },
-  { key: "priceDemi", label: "Demi" },
-  { key: "priceBouteille", label: "Bouteille" },
+  { key: "priceVerre", label: "Verre", volume: "12 cl" },
+  { key: "priceQuart", label: "Quart", volume: "25 cl" },
+  { key: "priceDemi", label: "Demi", volume: "50 cl" },
+  { key: "priceBouteille", label: "Bouteille", volume: "75 cl" },
 ] as const;
 
 export type WineTierKey = (typeof WINE_TIER_COLUMNS)[number]["key"];

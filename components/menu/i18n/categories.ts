@@ -17,7 +17,13 @@ export const CATEGORY_LABELS: Record<
   "Vins rouges": { en: "Red wines", de: "Rotweine", it: "Vini rossi" },
   "Sélection cave": { en: "Cellar selection", de: "Kellerauswahl", it: "Selezione cantina" },
   Spumante: { en: "Sparkling", de: "Sekt", it: "Spumante" },
-  Desserts: { en: "Desserts", de: "Desserts", it: "Dolci" },
+  "Nos Desserts": { en: "Desserts", de: "Desserts", it: "Dolci" },
+  "Cafés, Infusions": {
+    en: "Coffee & teas",
+    de: "Kaffee & Tee",
+    it: "Caffè e infusi",
+  },
+  Digestifs: { en: "Digestifs", de: "Digestifs", it: "Digestivi" },
 };
 
 export const CATEGORY_CHIP_LABELS: Record<
@@ -34,6 +40,9 @@ export const CATEGORY_CHIP_LABELS: Record<
   "Vins rosés": { en: "Rosé", de: "Rosé", it: "Rosati" },
   "Vins rouges": { en: "Red", de: "Rot", it: "Rossi" },
   "Sélection cave": { en: "Cellar", de: "Keller", it: "Cantina" },
+  "Nos Desserts": { en: "Desserts", de: "Desserts", it: "Dolci" },
+  "Cafés, Infusions": { en: "Coffee", de: "Kaffee", it: "Caffè" },
+  Digestifs: { en: "Digestifs", de: "Digestifs", it: "Digestivi" },
 };
 
 export function translateCategoryName(name: string, locale: MenuLocale): string {

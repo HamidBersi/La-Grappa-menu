@@ -7,6 +7,7 @@ type UiStrings = {
   filterAll: string;
   emptyCategory: string;
   selectLanguage: string;
+  wineGlass: string;
   wineQuart: string;
   wineDemi: string;
   wineBottle: string;
@@ -28,9 +29,10 @@ export const UI: Record<MenuLocale, UiStrings> = {
     filterAll: "Tout",
     emptyCategory: "Aucun plat dans cette catégorie pour l’instant.",
     selectLanguage: "Choisir la langue",
-    wineQuart: "Quart",
-    wineDemi: "Demi",
-    wineBottle: "Bouteille",
+    wineGlass: "verre",
+    wineQuart: "quart",
+    wineDemi: "demi",
+    wineBottle: "bouteille",
     loadError: "Impossible de charger le menu.",
     suggestionsCta: "Découvrez nos suggestions du jour",
     suggestionsHint: "Aussi : suggestions du jour →",
@@ -51,9 +53,10 @@ export const UI: Record<MenuLocale, UiStrings> = {
     filterAll: "All",
     emptyCategory: "No dishes in this category yet.",
     selectLanguage: "Choose language",
-    wineQuart: "Quarter",
-    wineDemi: "Half",
-    wineBottle: "Bottle",
+    wineGlass: "glass",
+    wineQuart: "quart",
+    wineDemi: "half",
+    wineBottle: "bottle",
     loadError: "Unable to load the menu.",
     suggestionsCta: "Discover today’s specials",
     suggestionsHint: "Also: today’s specials →",
@@ -74,6 +77,7 @@ export const UI: Record<MenuLocale, UiStrings> = {
     filterAll: "Alle",
     emptyCategory: "In dieser Kategorie gibt es noch keine Gerichte.",
     selectLanguage: "Sprache wählen",
+    wineGlass: "Glas",
     wineQuart: "Viertel",
     wineDemi: "Halbe",
     wineBottle: "Flasche",
@@ -97,9 +101,10 @@ export const UI: Record<MenuLocale, UiStrings> = {
     filterAll: "Tutto",
     emptyCategory: "Nessun piatto in questa categoria per il momento.",
     selectLanguage: "Scegli la lingua",
-    wineQuart: "Quarto",
-    wineDemi: "Mezzo",
-    wineBottle: "Bottiglia",
+    wineGlass: "calice",
+    wineQuart: "quarto",
+    wineDemi: "mezzo",
+    wineBottle: "bottiglia",
     loadError: "Impossibile caricare il menu.",
     suggestionsCta: "Scoprite i suggerimenti del giorno",
     suggestionsHint: "Anche: suggerimenti del giorno →",
