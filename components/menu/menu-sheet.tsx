@@ -3,8 +3,8 @@ import type { MenuCategoryDto, MenuItemDto } from "@/components/menu/menu-types"
 import { isListedOnMenu } from "@/components/menu/menu-types";
 import { DishTitle } from "@/components/menu/dish-title";
 import {
-  PRINT_NOTES,
   isPrintFooterDish,
+  printNotesFor,
 } from "@/components/menu/print-notes";
 import type { PrintPageSlice } from "@/components/menu/print-pagination";
 import {
@@ -172,7 +172,7 @@ function splitSupplement(text: string): { label: string; price: string | null } 
 }
 
 function PrintNoteBlock({ categoryName }: { categoryName: string }) {
-  const note = PRINT_NOTES[categoryName];
+  const note = printNotesFor(categoryName);
   if (!note) return null;
   return (
     <aside className="menu-print-note">
@@ -199,9 +199,7 @@ function PrintNoteBlock({ categoryName }: { categoryName: string }) {
 }
 
 function CategoryBlock({ category }: { category: MenuCategoryDto }) {
-  const listedItems = PRINT_NOTES[category.name]
-    ? category.items.filter((item) => !isPrintFooterDish(item.name))
-    : category.items;
+  const listedItems = category.items.filter((item) => !isPrintFooterDish(item.name));
   const wineItems = listedItems.filter((item) => hasWineTiers(item));
   const otherItems = listedItems.filter((item) => !hasWineTiers(item));
   const asWineTable = wineItems.length > 0 && otherItems.length === 0;

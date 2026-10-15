@@ -72,6 +72,14 @@ export const PRINT_NOTES: Record<string, PrintNote> = {
 
 const FOOTER_DISH_NAMES = new Set(["supplément burrata"]);
 
+/** Carte papier : le bloc pâtes n’apparaît qu’une fois, en bas de page (sous Pâtes fraîches). */
+const PRINT_DEFER_TO_LAST_ON_PAGE = new Set(["Nos Pâtes"]);
+
+export function printNotesFor(categoryName: string): PrintNote | undefined {
+  if (PRINT_DEFER_TO_LAST_ON_PAGE.has(categoryName)) return undefined;
+  return PRINT_NOTES[categoryName];
+}
+
 export function isPrintFooterDish(name: string): boolean {
   return FOOTER_DISH_NAMES.has(name.trim().toLowerCase());
 }
