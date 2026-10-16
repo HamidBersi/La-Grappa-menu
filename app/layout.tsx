@@ -35,11 +35,11 @@ export const metadata: Metadata = {
   description: "Carte digitale du restaurant La Grappa",
   icons: {
     icon: [
-      { url: "/favicon.ico?v=9", sizes: "32x32", type: "image/x-icon" },
-      { url: "/icons/favicon-32.png?v=9", sizes: "32x32", type: "image/png" },
-      { url: "/icons/favicon-192.png?v=9", sizes: "192x192", type: "image/png" },
+      { url: "/favicon.ico?v=10", sizes: "32x32", type: "image/x-icon" },
+      { url: "/icons/favicon-32.png?v=10", sizes: "32x32", type: "image/png" },
+      { url: "/icons/favicon-192.png?v=10", sizes: "192x192", type: "image/png" },
     ],
-    apple: [{ url: "/icons/apple-touch-icon.png?v=9", sizes: "180x180" }],
+    apple: [{ url: "/icons/apple-touch-icon.png?v=10", sizes: "180x180" }],
   },
   appleWebApp: {
     capable: true,
