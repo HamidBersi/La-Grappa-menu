@@ -298,7 +298,6 @@ function MobileWineCard({
   item: MenuItemDto;
   locale: MenuLocale;
 }) {
-  const ui = tUi(locale);
   const translated = translateItem(locale, item.name, item.description);
   const formats = WINE_TIER_COLUMNS.filter((column) => Boolean(item[column.key]));
   const onlyOne = formats.length <= 1;
@@ -322,17 +321,16 @@ function MobileWineCard({
         </p>
       ) : null}
       {!onlyOne ? (
-        <p className="mt-1.5 text-[13px] leading-relaxed">
-          {formats.map((column, index) => (
-            <span key={column.key}>
-              {index > 0 ? (
-                <span className="mx-1.5 text-ink/20">·</span>
-              ) : null}
+        <p className="mt-1.5 flex flex-wrap items-baseline gap-x-1.5 text-[13px] leading-relaxed">
+          {WINE_TIER_COLUMNS.map((column, index) => (
+            <span key={column.key} className="inline-flex items-baseline">
+              {index > 0 ? <span className="mr-1.5 text-ink/20">·</span> : null}
               <span className="font-semibold tabular-nums text-ink">
-                {formatEuro(item[column.key])}
-              </span>
-              <span className="ml-1 text-[12px] text-ink/45">
-                {ui[WINE_LABELS[column.key]]}
+                {item[column.key] ? (
+                  formatEuro(item[column.key])
+                ) : (
+                  <span className="font-normal text-ink/25">—</span>
+                )}
               </span>
             </span>
           ))}
