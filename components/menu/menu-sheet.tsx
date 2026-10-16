@@ -102,7 +102,7 @@ function WineTable({ items }: { items: MenuItemDto[] }) {
               {PRINT_WINE_COLUMNS.map((column) => (
                 <td
                   key={column.key}
-                  className="whitespace-nowrap pl-1 text-right align-top font-semibold tabular-nums text-black"
+                  className="wine-price whitespace-nowrap pl-1 text-right align-top tabular-nums text-black"
                 >
                   {item[column.key] ? formatPrintPrice(item[column.key]) : "-"}
                 </td>

@@ -114,9 +114,10 @@ select {
 .menu-sheet--measure .menu-dish-price,
 .menu-print-page .menu-dish-price {
   font-family: var(--font-cormorant), serif;
-  font-size: 17px;
+  font-size: 21px;
   font-style: italic;
-  font-weight: 600;
+  font-weight: 700;
+  line-height: 1;
   color: #111;
 }
 
@@ -159,8 +160,10 @@ select {
 }
 
 .menu-print-note-price {
+  font-size: 20px;
   font-style: italic;
-  font-weight: 600;
+  font-weight: 700;
+  line-height: 1;
   color: #ce2b37;
   white-space: nowrap;
 }
@@ -245,6 +248,13 @@ select {
 .menu-sheet--measure .wine-table td,
 .menu-print-page .wine-table td {
   font-size: 12.5px;
+}
+
+.menu-sheet--measure .wine-table td.wine-price,
+.menu-print-page .wine-table td.wine-price {
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.1;
 }
 
 .menu-print-pages {
