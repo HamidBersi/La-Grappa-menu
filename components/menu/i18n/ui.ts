@@ -44,7 +44,6 @@ export const UI: Record<MenuLocale, UiStrings> = {
       piatti: { label: "Plats", countNoun: "plats" },
       pizzeria: { label: "Pizzas", countNoun: "pizzas" },
       dolci: { label: "Desserts", countNoun: "desserts" },
-      dopo: { label: "Cafés & digestifs", navLabel: "Cafés", countNoun: "boissons" },
     },
   },
   en: {
@@ -68,7 +67,6 @@ export const UI: Record<MenuLocale, UiStrings> = {
       piatti: { label: "Mains", countNoun: "dishes" },
       pizzeria: { label: "Pizzas", countNoun: "pizzas" },
       dolci: { label: "Desserts", countNoun: "desserts" },
-      dopo: { label: "Coffee & digestifs", navLabel: "Coffee", countNoun: "drinks" },
     },
   },
   de: {
@@ -92,7 +90,6 @@ export const UI: Record<MenuLocale, UiStrings> = {
       piatti: { label: "Hauptgerichte", countNoun: "Gerichte" },
       pizzeria: { label: "Pizzen", countNoun: "Pizzen" },
       dolci: { label: "Desserts", countNoun: "Desserts" },
-      dopo: { label: "Kaffee & Digestifs", navLabel: "Kaffee", countNoun: "Getränke" },
     },
   },
   it: {
@@ -116,7 +113,6 @@ export const UI: Record<MenuLocale, UiStrings> = {
       piatti: { label: "Secondi", countNoun: "piatti" },
       pizzeria: { label: "Pizze", countNoun: "pizze" },
       dolci: { label: "Dolci", countNoun: "dolci" },
-      dopo: { label: "Caffè e digestivi", navLabel: "Caffè", countNoun: "bevande" },
     },
   },
 };

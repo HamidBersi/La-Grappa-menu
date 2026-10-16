@@ -8,8 +8,7 @@ export type MenuFamilyId =
   | "antipasti"
   | "piatti"
   | "pizzeria"
-  | "dolci"
-  | "dopo";
+  | "dolci";
 
 export type MenuFamily = {
   id: Exclude<MenuFamilyId, "all">;
@@ -69,20 +68,13 @@ export const MENU_FAMILIES: MenuFamily[] = [
   {
     id: "dolci",
     label: "Desserts",
-    categoryNames: ["Nos Desserts"],
-    chipLabelByName: { "Nos Desserts": "Desserts" },
-    countNoun: "desserts",
-  },
-  {
-    id: "dopo",
-    label: "Cafés & digestifs",
-    navLabel: "Cafés",
-    categoryNames: ["Cafés, Infusions", "Digestifs"],
+    categoryNames: ["Nos Desserts", "Cafés, Infusions", "Digestifs"],
     chipLabelByName: {
+      "Nos Desserts": "Desserts",
       "Cafés, Infusions": "Cafés",
       Digestifs: "Digestifs",
     },
-    countNoun: "boissons",
+    countNoun: "desserts",
   },
 ];
 

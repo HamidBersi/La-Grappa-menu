@@ -2,7 +2,6 @@
 
 import {
   CakeSlice,
-  Coffee,
   LayoutGrid,
   Pizza,
   Utensils,
@@ -31,7 +30,6 @@ const FAMILY_ICONS: Record<MenuFamily["id"], typeof Wine> = {
   piatti: UtensilsCrossed,
   pizzeria: Pizza,
   dolci: CakeSlice,
-  dopo: Coffee,
 };
 
 type MenuFamilyBarProps = {
@@ -146,9 +144,12 @@ export function MenuFamilyBar({
 
   return (
     <div className="min-w-0">
-      <HScrollRow wrapAt="never" className="gap-2 md:pr-10" fadeFromClass={fadeFromClass}>
-        {familyChips}
-      </HScrollRow>
+      <div className="flex flex-wrap gap-2 md:hidden">{familyChips}</div>
+      <div className="hidden md:block">
+        <HScrollRow wrapAt="never" className="gap-2 md:pr-10" fadeFromClass={fadeFromClass}>
+          {familyChips}
+        </HScrollRow>
+      </div>
       {showSubRow ? (
         <div className="mt-2.5 border-t border-ink/8 pt-2">
           <HScrollRow wrapAt="never" className="gap-x-1.5 md:pr-10" fadeFromClass={fadeFromClass}>
