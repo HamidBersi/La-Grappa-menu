@@ -104,7 +104,7 @@ select {
 .menu-sheet--measure .menu-dish-name,
 .menu-print-page .menu-dish-name {
   font-family: var(--font-cormorant), serif;
-  font-size: 16.5px;
+  font-size: 18px;
   font-style: italic;
   font-weight: 400;
   line-height: 1.32;
@@ -114,7 +114,7 @@ select {
 .menu-sheet--measure .menu-dish-price,
 .menu-print-page .menu-dish-price {
   font-family: var(--font-cormorant), serif;
-  font-size: 15.5px;
+  font-size: 17px;
   font-style: italic;
   font-weight: 600;
   color: #111;
@@ -123,7 +123,7 @@ select {
 .menu-sheet--measure .menu-dish-volume,
 .menu-print-page .menu-dish-volume {
   font-family: var(--font-cormorant), serif;
-  font-size: 13px;
+  font-size: 14.5px;
   font-style: italic;
   color: #333;
   min-width: 12mm;
@@ -150,7 +150,7 @@ select {
   justify-content: center;
   gap: 4mm;
   font-family: var(--font-cormorant), serif;
-  font-size: 15px;
+  font-size: 16.5px;
   font-style: italic;
   font-weight: 600;
   color: #1a1a1a;
@@ -178,7 +178,7 @@ select {
 
 .menu-print-note-text {
   font-family: var(--font-cormorant), serif;
-  font-size: 13px;
+  font-size: 14.5px;
   font-style: italic;
   font-weight: 400;
   color: #5a4f42;
@@ -189,7 +189,7 @@ select {
 .menu-sheet--measure .menu-dish-desc,
 .menu-print-page .menu-dish-desc {
   font-family: var(--font-cormorant), serif;
-  font-size: 12.5px;
+  font-size: 14px;
   font-style: italic;
   color: #444;
   margin: 0.7mm 0 0 0.2mm;
@@ -309,7 +309,7 @@ select {
 }
 
 .menu-print-page--tight .menu-dish-name {
-  font-size: 15.5px;
+  font-size: 17px;
 }
 
 .menu-print-page--tight .wine-row td {

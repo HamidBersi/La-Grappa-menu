@@ -295,7 +295,7 @@ export function MenuSheet({
       {measure ? null : (
         <header className="menu-sheet-header mb-9 text-center">
           <ItaliaBar className="mx-auto my-3.5 h-[3px] w-[70px]" />
-          <p className="text-[13.5px] tracking-wide text-[#6b6a5f]">{subtitle}</p>
+          <p className="text-[15px] tracking-wide text-[#6b6a5f]">{subtitle}</p>
         </header>
       )}
 
