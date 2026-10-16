@@ -55,7 +55,7 @@ select {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 0 8mm;
-  align-items: start;
+  align-items: stretch;
 }
 
 .menu-print-pair .menu-cat {
@@ -273,19 +273,25 @@ select {
   flex-direction: column;
 }
 
-.menu-print-page:not(.menu-print-page--tight) .menu-stack > .menu-cat,
-.menu-print-page:not(.menu-print-page--tight) .menu-stack > .menu-print-pair {
+.menu-print-page .menu-stack > .menu-cat,
+.menu-print-page .menu-stack > .menu-print-pair {
   flex: 1 1 auto;
+  min-height: 0;
+}
+
+.menu-print-page .menu-stack > .menu-cat,
+.menu-print-page .menu-print-pair .menu-cat {
   display: flex;
   flex-direction: column;
+  height: 100%;
 }
 
-.menu-print-page:not(.menu-print-page--tight) .menu-dish-list,
-.menu-print-page:not(.menu-print-page--tight) .wine-table {
+.menu-print-page .menu-dish-list,
+.menu-print-page .wine-table {
   flex: 1 1 auto;
 }
 
-.menu-print-page:not(.menu-print-page--tight) .menu-dish-list {
+.menu-print-page .menu-dish-list {
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
@@ -295,13 +301,18 @@ select {
   height: 100%;
 }
 
+.menu-print-page .menu-print-note {
+  margin-top: 14mm;
+  margin-bottom: 2mm;
+}
+
 .menu-print-page--tight .menu-cat-title {
   font-size: 42px;
   margin-bottom: 4mm;
 }
 
 .menu-print-page--tight .menu-stack .menu-cat {
-  margin-bottom: 5mm;
+  margin-bottom: 7mm;
 }
 
 .menu-print-page--tight .menu-dish {
@@ -318,8 +329,9 @@ select {
 }
 
 .menu-print-page--tight .menu-print-note {
-  margin-top: 5mm;
-  padding: 3.2mm 7mm 3mm;
+  margin-top: 12mm;
+  margin-bottom: 2mm;
+  padding: 3.6mm 7mm 3.4mm;
 }
 
 .menu-dish {
@@ -380,12 +392,8 @@ select {
     margin: 0 !important;
   }
 
-  .menu-print-page:not(.menu-print-page--tight) {
+  .menu-print-page {
     min-height: 269mm !important;
-  }
-
-  .menu-print-page--tight {
-    min-height: 0 !important;
   }
 
   .menu-sheet {
