@@ -144,12 +144,9 @@ export function MenuFamilyBar({
 
   return (
     <div className="min-w-0">
-      <div className="flex flex-wrap gap-2 md:hidden">{familyChips}</div>
-      <div className="hidden md:block">
-        <HScrollRow wrapAt="never" className="gap-2 md:pr-10" fadeFromClass={fadeFromClass}>
-          {familyChips}
-        </HScrollRow>
-      </div>
+      <HScrollRow wrapAt="never" className="gap-2 md:pr-10" fadeFromClass={fadeFromClass}>
+        {familyChips}
+      </HScrollRow>
       {showSubRow ? (
         <div className="mt-2.5 border-t border-ink/8 pt-2">
           <HScrollRow wrapAt="never" className="gap-x-1.5 md:pr-10" fadeFromClass={fadeFromClass}>
