@@ -21,6 +21,36 @@ Les traductions viennent d’un **dictionnaire** (carte actuelle). Un plat nouve
 
 Pages : `/menu` (clients) · `/admin/menu` (gérant)
 
+## Aperçu
+
+Page d’accueil : voir la carte ou la gérer.
+
+![Accueil](docs/screenshots/accueil.jpg)
+
+Carte lue par les clients, avec la langue et les familles de plats.
+
+![Carte client](docs/screenshots/carte-client.png)
+
+La même carte sur téléphone, en anglais.
+
+![Carte sur téléphone](docs/screenshots/carte-telephone-en.jpg)
+
+Les vins sur téléphone : verre, quart, demi et bouteille.
+
+![Vins sur téléphone](docs/screenshots/vins-telephone-en.jpg)
+
+Espace du gérant : édition, aperçu, impression et QR.
+
+![Espace gérant](docs/screenshots/espace-gerant.png)
+
+Tarifs d’un vin : verre, quart, demi, bouteille.
+
+![Tarifs vin](docs/screenshots/tarifs-vin.png)
+
+Première page de la carte imprimée, tirée du PDF (7 pages).
+
+![Carte imprimée](docs/screenshots/carte-imprimee.png)
+
 ## Sécurité (résumé)
 
 PIN gérant. Session signée (HMAC), cookie `httpOnly`. Le PIN n’est pas dans le navigateur.
