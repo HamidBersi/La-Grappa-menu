@@ -1,36 +1,30 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# La Grappa — carte digitale
 
-## Getting Started
+Utilisé **en production** par le restaurant La Grappa : la carte n’est plus seulement papier, le gérant la met à jour au téléphone, les clients la lisent au **QR code**.
 
-First, run the development server:
+Une seule carte, un seul rôle (pas d’écran suggestions en salle — contrairement à Félicità).
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## Ce que ça fait
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+| Qui | Quoi |
+| --- | --- |
+| Clients | Menu digital, **FR / EN / DE / IT**, langue mémorisée sur l’appareil |
+| Clients | Vins au verre, au quart, au demi ou à la bouteille ; pictos (piment, bio…) |
+| Gérant | Plats, prix, ordre par glisser-déposer ; retrouver un plat retiré en tapant son nom |
+| Gérant | Impression paginée + QR — protégé par un PIN |
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Les traductions viennent d’un **dictionnaire** (carte actuelle). Un plat nouveau reste en français tant qu’on n’ajoute pas la ligne de traduction.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Stack
 
-## Learn More
+**Next.js 16** · React 19 · TypeScript · Tailwind CSS 4 · Prisma · PostgreSQL · Vercel
 
-To learn more about Next.js, take a look at the following resources:
+Pages : `/menu` (clients) · `/admin/menu` (gérant)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Sécurité (résumé)
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+PIN gérant. Session signée (HMAC), cookie `httpOnly`. Le PIN n’est pas dans le navigateur.
 
-## Deploy on Vercel
+## Auteur
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+**Hamid Bersi** — conception, développement, mise en production et suivi.
